@@ -324,3 +324,17 @@ Everything needed to re-run is in the archive:
 - Any identity of mechanism with the `N=7` Lindblad backflow study.
 
 **Scope.** This is a finite `N=4`, finite-time (`0 <= t <= 3.688`), fixed-Hamiltonian numerical record at `Omega=1.0`, `J=0.7`, from the initial state `|0000>`. Every statement above is scoped to those conditions and to the observables defined in §3.
+
+---
+
+## Full reproducibility package
+
+The complete reference CSV files, vendored Rust dependencies, verification
+script, and reproduction audit are distributed as a GitHub Release asset.
+
+Download the ZIP and its SHA-256 file from the latest release, extract it,
+and run:
+
+python -m venv .venv
+.venv\Scripts\python -m pip install -r requirements.txt
+.venv\Scripts\python verify_reproduction.py
