@@ -1,0 +1,19 @@
+# Fixed four-qubit open-chain vs closed-ring dynamics
+
+このリポジトリは、切替やquenchを行わない固定Hamiltonianのもとで、
+4量子ビット直列系（open）と4量子ビット円環系（closed）の時間発展を
+比較した数値実験記録です。
+
+同じ初期状態 `|0000>` から出発し、境界結合 `(3,0)` の有無によって、
+状態距離、局所占有分布、一体Pauli期待値、二体connected相関、
+および縮退固有空間対の干渉構造がどのように異なるかを調べます。
+
+主な観測として、局所占有分布の形状差が小さい時刻でも、
+一体量と二体connected相関には大きなopen/closed差が残りました。
+ただし、これは有限 `N=4`・有限時間の数値結果であり、
+二体相関だけで全状態差を説明したものではありません。
+
+Rustによる時間発展、Pythonによるexact diagonalizationとモード解析、
+`dt=0.002` 対 `dt=0.001` の収束確認、対称性・norm・Hermiticity・
+global-phase不変性などの監査結果を収録しています。
+```
