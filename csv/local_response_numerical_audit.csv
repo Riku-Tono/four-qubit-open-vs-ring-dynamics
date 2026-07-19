@@ -1,0 +1,17 @@
+check,value,verdict
+cargo_fmt_check,PASS,PASS
+rust_tests,8 passed / 0 failed,PASS
+exact_max_abs_local_response_residual,2.822536789848229e-07,PASS
+exact_max_normalized_distribution_L1_residual,4.899999805352273e-07,PASS
+exact_max_position_set_mismatch_count,0,PASS
+dt_max_abs_local_response_residual,2.1169051372949e-07,PASS
+dt_max_normalized_distribution_L1_residual,3.675000939673545e-07,PASS
+dt_max_branch_normalized_L1_distance_residual,3.675000937453099e-07,PASS
+dt_max_position_set_mismatch_count,0,PASS
+quench_state_distance_reproduction_residual,3.170350267034383e-13,PASS
+dt002_max_norm_error,6.401545959988653e-13,PASS
+dt001_max_norm_error,7.813749647311852e-13,PASS
+exact_max_state_distance_residual,4.592834185190853e-08,PASS
+global_phase_invariance,Rust unit test,PASS
+open_mode_sum_max_abs_response_residual,9.992007221626409e-16,PASS
+closed_mode_sum_max_abs_response_residual,5.551115123125783e-16,PASS

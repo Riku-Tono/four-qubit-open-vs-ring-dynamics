@@ -1,0 +1,11 @@
+condition,value
+N,4
+Omega,1.0000000000000000e0
+J,6.9999999999999996e-1
+t_end,3.6880000000000002e0
+final_state_distance_dt002,5.4416199398205745e-1
+final_fidelity_dt002,7.2580834425971941e-1
+max_state_distance_dt002,5.4693494403630305e-1
+time_of_max_state_distance_dt002,3.4620000000000002e0
+max_open_dt002_vs_dt001_state_distance,4.8514665949641782e-7
+max_closed_dt002_vs_dt001_state_distance,7.2695677981677461e-7
