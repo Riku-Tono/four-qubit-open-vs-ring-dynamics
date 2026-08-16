@@ -234,8 +234,7 @@ All audits below are reported as observed residuals; none of them is an interpre
 | check | residual / result |
 |---|---:|
 | `cargo fmt --all -- --check` | PASS |
-| Rust tests (state/response stage) | 8 passed / 0 failed |
-| Rust tests (correlation stage) | 10 passed / 0 failed |
+| Current Rust test suite | 10 passed / 0 failed |
 | exact vs. Trotter local response | 2.82e-07 |
 | exact vs. Trotter normalized distribution L1 | 4.90e-07 |
 | `dt=0.002` vs `dt=0.001` local response | 2.12e-07 |
@@ -253,16 +252,17 @@ Exact-diagonalization agreement, step-size convergence, norm conservation, Hermi
 
 ## 11. How to reproduce and audit
 
+Tested with Python 3.14.5, NumPy 2.5.0, and Rust/Cargo 1.97.0. NumPy is pinned in `requirements.txt`; Cargo crates are included in `vendor/`, so the Rust stages do not require network access.
+
 ```text
-cargo fmt --all -- --check
-cargo test --release --offline
-cargo run --release --offline
-python analyze_modes.py
-python local_response_analysis.py
-python two_body_correlation_analysis.py
+python -m venv .venv
+.venv\Scripts\python -m pip install -r requirements.txt
+.venv\Scripts\python verify_reproduction.py
 ```
 
-The Rust binary produces the time series and state distances at both step sizes; the Python scripts produce the modal, local-response, and correlation analyses. The modal audit uses exact diagonalization with degenerate eigenspaces grouped before ranking.
+On macOS/Linux, use `.venv/bin/python` instead. The verifier creates a clean temporary working directory, executes formatting, all 10 Rust tests, both Trotter runs, and all three Python analyses. It then compares all 40 regenerated CSV files against the packaged references with absolute tolerance `2e-12` and relative tolerance `1e-10`, and writes `reproduction_audit.json` with the environment, command results, comparison maxima, and final verdict.
+
+The Rust binary produces the time series and state distances at both step sizes; the Python scripts produce the modal, local-response, and correlation analyses. The modal audit uses exact diagonalization with degenerate eigenspaces grouped before ranking. Cargo/test PASS results are recorded by the verifier and are not hard-coded into the numerical CSV audit.
 
 Everything needed to re-run is in the archive:
 
@@ -324,17 +324,172 @@ Everything needed to re-run is in the archive:
 - Any identity of mechanism with the `N=7` Lindblad backflow study.
 
 **Scope.** This is a finite `N=4`, finite-time (`0 <= t <= 3.688`), fixed-Hamiltonian numerical record at `Omega=1.0`, `J=0.7`, from the initial state `|0000>`. Every statement above is scoped to those conditions and to the observables defined in §3.
-
 ---
 
-## Full reproducibility package
+## 14. Subsequent weak-link and symmetry extensions (2026-08-17)
 
-The complete reference CSV files, vendored Rust dependencies, verification
-script, and reproduction audit are distributed as a GitHub Release asset.
+The original fixed-endpoint record in §§1–13 is preserved unchanged above. The analyses in §§14–18 are later extensions built from that sealed baseline. They do not replace the direct open-versus-closed comparison.
 
-Download the ZIP and its SHA-256 file from the latest release, extract it,
-and run:
+The main extension uses
 
-python -m venv .venv
-.venv\Scripts\python -m pip install -r requirements.txt
-.venv\Scripts\python verify_reproduction.py
+```text
+H(lambda) = Omega/2 sum_i X_i
+          + J/2 [Z0Z1 + Z1Z2 + Z2Z3 + lambda Z3Z0]
+```
+
+with the same `N=4`, `Omega=1`, `J=0.7`, time window, and site ordering. The sampled grid is `lambda=0,0.05,...,1`; `lambda=0` is the open-chain reference and `lambda=1` is the closed-ring endpoint. This is a closing-bond-strength sweep, not a claim of continuous topology.
+
+For connected correlations, the signed branch difference is
+
+```text
+Delta C_ij^AA(t,lambda) = C_ij^AA(t,lambda) - C_ij^AA(t,0).
+```
+
+The pointwise squared-difference share of pair `ij` is
+
+```text
+w_ij = sum_A (Delta C_ij^AA)^2
+       / sum_{k<l,A} (Delta C_kl^AA)^2,
+```
+
+and `Q_ij` denotes the corresponding time-integrated numerator divided by the time-integrated denominator. Pointwise ratios are undefined where the all-channel difference norm is at or below `1e-8`. Squaring discards sign, so every concentration result must be read together with the signed-channel results.
+
+### 14.1 Weak-link sweep
+
+The endpoint checks against the sealed open/closed baseline all pass. At `lambda=1`, the maximum state distance is `0.546934958021` at `t=3.462`, and its time RMS is `0.393869262797`.
+
+At `lambda=1`, the time-integrated seam shares for pair `(0,3)` are:
+
+| channel | integrated seam share |
+|---|---:|
+| XX | 0.412739 |
+| YY | 0.282331 |
+| ZZ | 0.548788 |
+| all channels | 0.451198 |
+
+At `t=3.462`, the all-channel pointwise seam share is `0.514835`. The signed seam differences are `-0.472156818` in XX, `+0.268163791` in YY, and `+0.440689566` in ZZ. The seam is therefore prominent in squared-difference space, but the three channels do not move in one common signed direction.
+
+Using the predeclared rule `Q03 > 1/3` and requiring it to hold for at least 75% of nonzero `lambda` values and at least 50% of the valid nonzero-`lambda` time grid, the observed fractions are `0.550` and `0.761`. The mechanical classification is therefore **limited**, not broadly robust.
+
+### 14.2 Pair-space redistribution
+
+The integrated top pair changes from the reflection-tied pair set `02|13` for `lambda=0.05–0.15` to the seam pair `03` for `lambda=0.20–1.00`. Linear interpolation between sampled values places the seam-versus-`02/13` crossings near `lambda=0.166`. The separate fixed-threshold event `Q03=1/3` occurs later, near `lambda=0.452`.
+
+At `lambda=1`, the integrated six-pair decomposition is:
+
+| pair | integrated share |
+|---|---:|
+| 01 | 0.063122 |
+| 02 | 0.132206 |
+| 03 | 0.451198 |
+| 12 | 0.158144 |
+| 13 | 0.132206 |
+| 23 | 0.063122 |
+
+When `w03<1/3`, the energy-weighted non-seam remainder is split `0.170` to the two seam-adjacent pairs `01+23` and `0.830` to `12+02+13`. Thus the data do not show a simple seam-to-adjacent-to-remaining sequence. These are concurrent partitions of a squared observable-difference denominator, not evidence of propagation.
+
+Reflection-related equalities are numerically retained: `01=23` and `02=13`, with integrated-share residuals at approximately `1e-15`.
+
+## 15. Signed versus squared connected-correlation differences
+
+The signed audit separates the integral
+
+```text
+I = integral Delta C dt
+```
+
+from the absolute integral
+
+```text
+M = integral |Delta C| dt
+```
+
+and reports the signed balance `P=I/M` where defined. At `lambda=1`, the seam results are:
+
+| channel | Q03 | I | M | P | sign changes |
+|---|---:|---:|---:|---:|---:|
+| XX | 0.412739 | -0.609628 | 0.609628 | -1.000000 | 0 |
+| YY | 0.282331 | +0.355200 | 0.385902 | +0.920442 | 2 |
+| ZZ | 0.548788 | +0.913784 | 0.913784 | +1.000000 | 0 |
+
+The large seam squared contribution is therefore compatible with persistent negative XX and predominantly positive YY/ZZ. `Q` measures magnitude concentration; `P` measures signed consistency and cancellation.
+
+Sign-canceling components do occur. The strongest fractional cancellation is at `lambda=0.30`, pair `23`, channel YY, with `M=0.0496291` and `P=-0.00503727`, but its magnitude ranks only 309th of 360 components. Among components with channel share at least `0.1`, the smallest observed `|P|` is about `0.662`. The data therefore do not support the stronger statement that the dominant squared contributions are strongly canceled.
+
+## 16. End–interior occupation contrast versus seam concentration
+
+For the original `|0000>` initial state, define the signed one-body contrast
+
+```text
+E(t,lambda) = [R0 + R3 - R1 - R2] / 2.
+```
+
+The time RMS of `E` is nonincreasing across the sampled `lambda` grid, falling from `0.0848382` at `lambda=0` to a numerical residual `6.922e-17` at `lambda=1`. In contrast, integrated `Q03` is nondecreasing over its 20 defined nonzero-`lambda` values, from `0.235105` at `lambda=0.05` to `0.451198` at `lambda=1`.
+
+Across the 20 summaries, `Spearman(E_RMS,Q03)=-1.000000` and `Pearson=-0.980965`. Across all valid `(lambda,t)` points, `Spearman(|E|,w03)=-0.840902` and `Pearson=-0.814780`. These are descriptive relationships on a finite, serially related grid; they are not independent-sample inference or causal evidence.
+
+The predeclared quartile check—`|E|` at or below its 25th percentile and `w03` at or above its 75th percentile—selects 5,387 points, or `14.6657%` of valid points, spanning `lambda=0.20–1.00` and `t=0.012–1.276`. Dividing `|E|` by total occupation preserves the suppression trend where defined, so the raw trend is not explained only by a uniform change in total occupation.
+
+The `|E|`, `w03`, and state-distance peaks generally occur at different times. None of these three quantities is used as a proxy for either of the others.
+
+## 17. Initial-state sensitivity
+
+Only two additional initial states were introduced, with all Hamiltonian, grid, operator, floor, and per-state `lambda=0` reference definitions held fixed.
+
+| initial state | E_RMS at lambda=0 | E_RMS at lambda=1 | Q03 at lambda=0.05 | Q03 at lambda=1 | state-distance RMS at lambda=1 |
+|---|---:|---:|---:|---:|---:|
+| `|0000>` | 0.084838 | 0.000000 | 0.235105 | 0.451198 | 0.393869 |
+| `|1000>` | 0.247139 | 0.249492 | 0.020359 | 0.109157 | 0.457350 |
+| `|0100>` | 0.275810 | 0.249492 | 0.020359 | 0.109157 | 0.457350 |
+
+For `|1000>`, `E_RMS` rises slightly rather than being suppressed, while `Q03` is nonmonotonic and remains below the `|0000>` curve at every defined `lambda`. For `|0100>`, `E_RMS` decreases from a larger open-endpoint value. Both asymmetric single-site states reach the same three endpoint values at `lambda=1`, but equality of these selected metrics is not equality of the full states.
+
+The full `|1000>` and `|0100>` curves agree to `4.382e-15` for `Q03` and `1.221e-15` for time-RMS state distance. Their `E_RMS` curves differ for `lambda<1`. Thus the suppression of `E` together with growth of `Q03`, seen for `|0000>`, is initial-state sensitive rather than a universal Hamiltonian-only pattern.
+
+### 17.1 Exact symmetry explanation
+
+The `Q03` and state-distance equalities for `|1000>` and `|0100>` are enforced by an antiunitary symmetry.
+
+Let `R` implement the reflection `r=(0 3)(1 2)`, and define
+
+```text
+Gamma = Z0 Z1 Z2 Z3 X0 X2.
+```
+
+For every sampled `lambda`—indeed for the complete Hamiltonian family—
+
+```text
+[R,H(lambda)] = 0,
+Gamma H(lambda) Gamma^-1 = -H(lambda),
+R Gamma |1000> = -|0100>.
+```
+
+Because `H(lambda)` is real in the computational basis, complex conjugation `K` gives the antiunitary map `Theta=R Gamma K`, which commutes with the same-time evolution:
+
+```text
+Theta exp[-i H(lambda)t] = exp[-i H(lambda)t] Theta.
+```
+
+The same `Theta` maps both the `lambda=0` and `lambda>0` evolutions, so it preserves the overlap magnitude used in the state distance. For connected correlations it only permutes pairs and changes channel/site signs; squaring removes those signs, the all-pair denominator is invariant, and the seam pair `03` is fixed by reflection. Therefore pointwise `w03` and integrated `Q03` are symmetry invariants.
+
+The occupation contrast is not invariant because some `Z_i` map to `-Z_j`, which sends `R_i=(1-Z_i)/2` to `1-R_j`. At `lambda=1`, the saved arrays satisfy `E_0100(t)=-E_1000(t)` to `8.33e-16`, explaining the equal endpoint RMS values without implying pointwise equality of the occupations.
+
+The operator identities have zero matrix residual. Stored-array residuals are `4.21e-15` for the all-channel difference norm, `1.00e-15` for reconstructed seam squared energy, and `4.40e-15` for integrated `Q03`. A larger pointwise ratio discrepancy near the `1e-8` floor is roundoff amplification, not symmetry breaking.
+
+## 18. Extension artifacts, audit status, and updated boundary
+
+All extension stages report **PASS** for their numerical audits and independent regeneration checks. The sealed baseline and previously completed stage artifacts were hash-checked before and after the relevant work and were not modified.
+
+Primary local reports:
+
+- [Weak-link sweep](C:/Users/yauki/Documents/Codex/2026-08-17/pe/outputs/four_qubit_weak_link_sweep_2026-08-17/weak_link_sweep/REPORT.md)
+- [Pair-space redistribution](C:/Users/yauki/Documents/Codex/2026-08-17/pe/outputs/four_qubit_weak_link_sweep_2026-08-17/pair_space_redistribution/REPORT.md)
+- [Signed versus squared differences](C:/Users/yauki/Documents/Codex/2026-08-17/vs/outputs/signed_vs_squared/REPORT.md)
+- [End–interior contrast versus seam concentration](C:/Users/yauki/Documents/Codex/2026-08-17/vs/outputs/end_interior_vs_seam/REPORT.md)
+- [`|1000>` comparison](C:/Users/yauki/Documents/Codex/2026-08-17/vs/outputs/initial_1000_three_metric_comparison/REPORT.md)
+- [`|0100>` three-state comparison](C:/Users/yauki/Documents/Codex/2026-08-17/vs/outputs/initial_0100_three_state_comparison/REPORT.md)
+- [Antiunitary symmetry explanation](C:/Users/yauki/Documents/Codex/2026-08-17/vs/outputs/symmetry_explanation_1000_0100/REPORT.md)
+
+The added results support only finite-`N=4`, finite-time, sampled-`lambda`, selected-observable statements under the stated Hamiltonian and initial states. They do not establish a continuous topology change, a phase transition, transport, information flow, correlation transfer, causation, entanglement, a general initial-state law, or thermodynamic-limit behavior. In particular, a larger squared contribution is not restated as a larger signed correlation, and suppression of `E` is not treated as identification of the full state with a ring state.
+
+
