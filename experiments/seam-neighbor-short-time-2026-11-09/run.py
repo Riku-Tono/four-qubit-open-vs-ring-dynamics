@@ -17,8 +17,9 @@ H_SCALE, RADIUS, ORDER = 40, 5, 20
 
 
 class Ising:
-    def __init__(self, size, seam, cut_middle=False):
+    def __init__(self, size, seam, cut_middle=False, *, radius=RADIUS):
         self.dim = 2**size
+        self.radius = radius
         self.masks = [1 << (size - 1 - site) for site in range(size)]
         self.z = [[1 - 2 * bool(basis & mask) for basis in range(self.dim)] for mask in self.masks]
         # M = 40H. In this scale Omega/2 = 20, J/2 = 14 and lambda*J/2 = 7.
@@ -27,7 +28,7 @@ class Ising:
         self.diagonal = [sum(k * self.z[i][b] * self.z[j][b] for i, j, k in bonds)
                          for b in range(self.dim)]
         self.initial = [int(b == self.dim // 2) for b in range(self.dim)]
-        assert max(map(abs, self.diagonal)) + 20 * size <= H_SCALE * RADIUS
+        assert max(map(abs, self.diagonal)) + 20 * size <= H_SCALE * self.radius
 
     def apply(self, vector):
         return [diagonal * vector[b] + 20 * sum(vector[b ^ mask] for mask in self.masks)
@@ -44,7 +45,7 @@ class Ising:
 def moment_series(powers, observable):
     mapping, y_count = observable
     coefficients = []
-    for n in range(ORDER + 1):
+    for n in range(len(powers)):
         phase = (1, 0, -1, 0)[(n + y_count) % 4]
         numerator = 0
         if phase:
@@ -56,10 +57,14 @@ def moment_series(powers, observable):
     return coefficients
 
 
-def connected_series(model, observables):
+def hamiltonian_powers(model, order):
     powers = [model.initial]
-    for _ in range(ORDER):
+    for _ in range(order):
         powers.append(model.apply(powers[-1]))
+    return powers
+
+
+def connected_series(powers, observables):
     combined, left, right = [moment_series(powers, observable) for observable in observables]
     result = [coefficient - sum(left[k] * right[n - k] for k in range(n + 1))
               for n, coefficient in enumerate(combined)]
@@ -86,19 +91,21 @@ def bessel(order, half_argument):
 
 
 def evolve(model, t, degree):
-    # Chebyshev expansion of exp(-iHt) on [-RADIUS, RADIUS].
+    # Chebyshev expansion of exp(-iHt) on [-radius, radius].
+    radius = model.radius
+    scale = H_SCALE * radius
     real, imag = [Decimal(0)] * model.dim, [Decimal(0)] * model.dim
     older = [Decimal(value) for value in model.initial]
-    current = [value / (H_SCALE * RADIUS) for value in model.apply(older)]
+    current = [value / scale for value in model.apply(older)]
     for n in range(degree + 1):
         vector = older if n == 0 else current
-        weight = bessel(n, RADIUS * t / 2) * (1 if n == 0 else 2)
+        weight = bessel(n, radius * t / 2) * (1 if n == 0 else 2)
         target = real if n % 2 == 0 else imag
         weight *= (1, -1, -1, 1)[n % 4]
         for i, value in enumerate(vector):
             target[i] += weight * value
         if n:
-            older, current = current, [2 * value / (H_SCALE * RADIUS) - previous
+            older, current = current, [2 * value / scale - previous
                                        for value, previous in zip(model.apply(current), older)]
     return real, imag
 
@@ -142,13 +149,14 @@ def main():
     for size, pairs in PAIRS.items():
         for branch, seam in (("linked", 7), ("open", 0)):
             model = Ising(size, seam)
+            powers = hamiltonian_powers(model, ORDER)
             observables = {(pair, channel): make_observables(model, pair, channel)
                            for pair in pairs for channel in CHANNELS}
             values, norm = numerics(model, observables, 80, 64)
             refined, refined_norm = numerics(model, observables, 96, 80)
             max_norm = max(max_norm, float(norm), float(refined_norm))
             for (pair, channel), operators in observables.items():
-                series = connected_series(model, operators)
+                series = connected_series(powers, operators)
                 series_by_key[size, branch, pair, channel] = series
                 order, coefficient = leading(series)
                 samples = []
@@ -180,9 +188,10 @@ def main():
 
     # Cutting the central bond removes the alternative non-seam route for both N=4 pairs.
     cut = Ising(4, 7, cut_middle=True)
+    powers = hamiltonian_powers(cut, ORDER)
     route_check = {}
     for pair in PAIRS[4]:
-        order, value = leading(connected_series(cut, make_observables(cut, pair, "XX")))
+        order, value = leading(connected_series(powers, make_observables(cut, pair, "XX")))
         opened = series_by_key[4, "open", pair, "XX"][order]
         full = series_by_key[4, "linked", pair, "XX"][order]
         assert order == 6 and value + opened == full

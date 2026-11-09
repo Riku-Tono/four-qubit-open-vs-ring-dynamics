@@ -4,6 +4,8 @@
 
 ---
 
+**Short-time extension.** Sections 21–24 use the initial state `|10...0>` to study distance-dependent connected correlations on open chains and weak rings. Section 24 classifies the weak-link strengths that cancel the leading YY or ZZ term for every antipodal pair of an even ring. [Distance laws and cancellation roots](#21-eight-qubit-check-of-the-distance-rule-2026-11-09)
+
 ## 1. What is being compared
 
 Two branches, both starting at `t=0` from `|0000>`, both evolved under their own fixed Hamiltonian for the whole observation window:
@@ -613,3 +615,61 @@ After running the three §19 stages in order, run `python -B run.py` from each o
 - Pair weights and time-window scan. [Report](experiments/seam-pair-time-window-2026-11-09/REPORT.md) · [Results](experiments/seam-pair-time-window-2026-11-09/results.json)
 - Branch waveforms and cross terms. [Report](experiments/seam-neighbor-waveforms-2026-11-09/REPORT.md) · [Results](experiments/seam-neighbor-waveforms-2026-11-09/results.json) · [Waveforms CSV](experiments/seam-neighbor-waveforms-2026-11-09/waveforms.csv)
 - Exact short-time series. [Report](experiments/seam-neighbor-short-time-2026-11-09/REPORT.md) · [Results](experiments/seam-neighbor-short-time-2026-11-09/results.json)
+
+## 21. Eight-qubit check of the distance rule (2026-11-09)
+
+At the same `Omega=1`, `J=0.7`, and `epsilon=0`, the eight-qubit initial state is `|10000000>`. The matched pairs extend from `02 -> 04 -> 06` and `13 -> 15 -> 17`. The first nonzero powers of the connected correlations are the same for both pairs in each row.
+
+| Size and branch | Shortest path in edges | XX | YY | ZZ |
+|:---|---:|---:|---:|---:|
+| N=4, open | 2 | 6 | 8 | 10 |
+| N=6, open | 4 | 14 | 16 | 18 |
+| N=8, open | 6 | 22 | 24 | 26 |
+| N=4, 6, 8, linked | 2 | 6 | 8 | 10 |
+
+For the branch difference `C_0.5 - C_0`, the `t^6` coefficients in XX remain `-49/1800` and `+49/1800` across all three sizes. Between `N=6` and `N=8`, the leading coefficients of the branch difference also agree in YY and ZZ.
+
+An exact scan through order 30 covered all 28 pairs in each eight-qubit branch. At shortest distance `d >= 2`, the leading orders are `(4d-2, 4d, 4d+2)` in every case. Nearest-neighbor pairs have orders `(4,4,6)`. For the two matched pairs on the open chain, the report also derives closed-form XX coefficients and proves the leading order `4d-2` for every even `N >= 4` with the same one-excitation initial state. The all-axis distance rule is verified here at finite size.
+
+Run `python -B run.py` in the eight-qubit experiment folder. The script uses the Python standard library and the preceding short-time experiment's code and results. [Report and derivation](experiments/seam-neighbor-eight-qubit-2026-11-09/REPORT.md) · [Exact coefficients and numerical checks](experiments/seam-neighbor-eight-qubit-2026-11-09/results.json)
+
+## 22. Open-chain distance law, independent check, and prior work (2026-11-09)
+
+For the open chain with uniform nonzero transverse field and bond strength and the initial state `|10...0>`, every pair at distance `d >= 2` has first nonzero connected-correlation orders `(4d-2, 4d, 4d+2)` in XX, YY, and ZZ, respectively. The proof applies to both even and odd chain sizes. It extends the XX calculation in §21 by counting the minimum Majorana hops that produce the same nonempty spin-flip interval on both sides of the connected correlator. The signed contributions at that order sum to a nonzero coefficient. The report gives a finite sum for any such pair and closed forms for `(0,N-2)` and `(1,N-1)`. The linked branch is covered by the finite-size results in §21.
+
+Exact Majorana commutators verify the matched-pair formulas at `N=4,...,12`. For `N=4,...,9`, every computed matched-pair coefficient through `4d+2` also agrees with the direct state-vector expansion in the computational basis. The direct expansion independently confirms the leading terms for all 84 pairs at distance at least two across open chains of sizes `N=3,...,9`.
+
+The longitudinal exponent `4d+2` has direct precedent in the short-time Rydberg density correlations of Lienhard et al. Their first three leading coefficients agree with a direct series calculation after specializing their equations to a uniform static ring with an all-aligned initial state. The literature comparison separates that precedent and the known Wick formulas from the coefficients for the single flipped endpoint in the open chain. Priority for the three-axis formulas remains undetermined. [Lienhard et al. (2018), §V.B and Appendix E](https://journals.aps.org/prx/pdf/10.1103/PhysRevX.8.021070)
+
+Run `python -B verify.py` in the distance-law folder to repeat the exact checks. [Proof and literature comparison](experiments/open-chain-distance-law-2026-11-09/REPORT.md) · [Verification script](experiments/open-chain-distance-law-2026-11-09/verify.py)
+
+## 23. Weak-ring distance law and antipodal cancellation (2026-11-09)
+
+For the ring with `lambda=1/2`, uniform nonzero `Omega` and `J`, and initial state `|10...0>`, the leading connected-correlation orders are `(4d-2, 4d, 4d+2)` for all `N >= 3` and ring distances `d >= 2`. Adjacent pairs have orders `(4,4,6)`. The proof uses an analytic bound at `d >= 400`, exhaustive integer checks of the shorter-distance configurations, and exact small-ring cases. A separate state-vector calculation verifies 855 channel cases through `N=12`.
+
+At antipodal separation, the leading coefficient is the sum of the two shortest-route contributions, including the immediate exterior bonds for YY and ZZ. The four-site antipodal YY and ZZ coefficients also receive a full-cycle term. At `N=8`, pair `(0,4)` has opposite ZZ route contributions at `lambda=1/2`, with ratio `-85/86` for the seam route relative to the ordinary route.
+
+At `Omega=1, J=0.7`, tuning the seam to `(151+32 sqrt(39))/745` raises the leading YY order for `(0,4)` from 16 to 18. Tuning it to `(39+16 sqrt(11))/185` raises the ZZ order from 18 to 20. Both cancellations were checked using exact coefficient polynomials. The antipodal XX coefficient is nonzero throughout `0 < lambda <= 1`.
+
+Run `python -B coefficients.py` for the finite part of the proof and `python -B verify.py` for the independent Taylor checks. [Proof and cancellation examples](experiments/weak-ring-distance-law-2026-11-09/REPORT.md) · [Exact Taylor verification](experiments/weak-ring-distance-law-2026-11-09/verify.py)
+
+## 24. Antipodal cancellation roots for all even sizes (2026-11-09)
+
+For even `N=2d >= 4` and the same one-flipped-site initial state, the candidate YY and ZZ coefficients at orders `2N` and `2N+2` are quadratic in the seam strength. The coefficient formulas give the following classification in `0 < lambda < 1`.
+
+| Antipodal pair | Sizes with one root per axis |
+|:---|:---|
+| `(0,d)` | Even `N >= 8` |
+| `(d-1,N-1)` | Even `N >= 4` |
+| Other antipodal pairs | None |
+
+Each cancelling pair has distinct simple roots with `lambda_YY < lambda_ZZ`. Each series strictly decreases as `N` increases. For either position the asymptotic roots are `(N+2)/2^(N+1)` for ZZ and `(3/4)(N+2)/2^(N+1)` for YY. At the same size and axis, the site-0 pair has the larger root whenever both exist. The antipodal XX coefficient is nonzero throughout `0 < lambda <= 1`. Its leading contribution uses only the bonds on the two routes, while YY and ZZ also depend on the immediately exterior bonds.
+
+| `N` | Pair | `lambda_YY` | `lambda_ZZ` |
+|---:|:---|---:|---:|
+| 6 | `(2,5)` | 0.050191310 | 0.062533422 |
+| 8 | `(0,4)` | 0.470926089 | 0.497654036 |
+| 8 | `(3,7)` | 0.013492741 | 0.016852776 |
+| 10 | `(0,5)` | 0.012253477 | 0.016005605 |
+
+The general formulas match all 40 YY and ZZ antipodal polynomials from an exact state-vector calculation at `N=4,6,8,10,12`. Run `python -B formulas.py` for root values and exact finite comparisons, and `python -B verify.py` for the state-vector calculation. [General formulas and proof](experiments/antipodal-cancellation-2026-11-09/REPORT.md) · [Exact verification](experiments/antipodal-cancellation-2026-11-09/verify.py)

@@ -16,4 +16,20 @@
 Rustによる時間発展、Pythonによるexact diagonalizationとモード解析、
 `dt=0.002` 対 `dt=0.001` の収束確認、対称性・norm・Hermiticity・
 global-phase不変性などの監査結果を収録しています。
-```
+
+## 短時間の距離則と正反対ペアの相殺（2026-11-10公開）
+
+追加実験はサイト0だけを励起した初期状態 `|10...0>` を使います。
+開放鎖と継ぎ目の強さが `lambda=1/2` のリングでは、距離 `d>=2` の
+連結相関の先頭次数は `(XX, YY, ZZ) = (4d-2, 4d, 4d+2)` です。
+リングの隣接ペアは `(4,4,6)` です。
+
+偶数リング `N=2d` で `0<lambda<1` を調整すると、正反対ペア
+`(0,d)` は `N>=8`、`(d-1,N-1)` は `N>=4` で YY と ZZ の
+先頭係数がそれぞれ1回ゼロになります。YY の根は ZZ の根より小さく、
+XX の先頭係数はすべての正反対ペアで残ります。N=8 の `(0,4)` では
+YY の根は約0.470926089、ZZ の根は約0.497654036です。
+
+- 英語READMEの§21–24 [距離則と相殺根](../README.md#21-eight-qubit-check-of-the-distance-rule-2026-11-09)
+- 日本語の[全ペアの一般式と証明](../experiments/antipodal-cancellation-2026-11-09/REPORT.md)
+- [厳密な状態ベクトル検算](../experiments/antipodal-cancellation-2026-11-09/verify.py)
