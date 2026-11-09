@@ -493,3 +493,123 @@ Primary local reports:
 The added results support only finite-`N=4`, finite-time, sampled-`lambda`, selected-observable statements under the stated Hamiltonian and initial states. They do not establish a continuous topology change, a phase transition, transport, information flow, correlation transfer, causation, entanglement, a general initial-state law, or thermodynamic-limit behavior. In particular, a larger squared contribution is not restated as a larger signed correlation, and suppression of `E` is not treated as identification of the full state with a ring state.
 
 
+
+## 19. Endpoint transverse-field perturbations (2026-11-09)
+
+This extension tests the symmetry in §17.1 with `N=4`, `Omega=1`, `J=0.7`, and `0 <= t <= 3.688`. The weak-link branch has `lambda=0.5` and the open reference has `lambda=0`. Each comparison applies the same perturbation to both branches and uses initial states `A=|1000>` and `B=|0100>`.
+
+### 19.1 Symmetry and the short-time occupation residual
+
+Write `H_same = H + epsilon*(X0 + X3)` and `H_opp = H + epsilon*(X0 - X3)`. Since `Theta` sends `X0` to `-X3` and `X3` to `-X0`, the Hamiltonians obey
+
+```text
+Theta H_same(lambda,epsilon) Theta^-1 = -H_same(lambda,epsilon)
+Theta H_opp(lambda,epsilon) Theta^-1 = -H_opp(lambda,-epsilon)
+```
+
+Define the occupation residual using the §3 occupations as `R_C(t) = R0^A(t) + R3^B(t) - 1`. For the same-direction fields the symmetry gives `R_C(t)=0` exactly. The maximum observed `|R_C|` at `lambda=0.5` and `epsilon=+/-0.05` was `2.78e-15`.
+
+For opposite-direction fields, the short-time expansion is `R_C(t) = -2*Omega*epsilon*t^2 + O(t^4)`. At `epsilon=+0.05`, successive halvings of the observation time reduced the error in `R_C/t^2` by about a factor of four, reaching `-0.099999350` at `t=0.005` against the predicted `-0.1`. The negative perturbation gave `+0.099999349` against `+0.1`.
+
+### 19.2 Seam share and linear response
+
+`Q_A(epsilon)` and `Q_B(epsilon)` are the integrated `Q03` of §14 for the two initial states. Under opposite-direction fields, the sign-reversing symmetry gives `Q_A(epsilon)=Q_B(-epsilon)` exactly where the share is defined. The largest absolute discrepancy across the ten signed samples below was `1.08e-15`.
+
+The same-sign difference `Delta Q(epsilon) = Q_A(epsilon) - Q_B(epsilon)` is therefore odd in `epsilon`. At `epsilon=+0.05`, the two shares are `0.075032997` and `0.017521337`. The table gives the difference for positive `epsilon` and the response averaged over both signs. Negative `epsilon` reverses the sign of `Delta Q`.
+
+| `abs(epsilon)` | `epsilon^2` | `Delta Q` at positive `epsilon` | `Delta Q/epsilon` |
+|---:|---:|---:|---:|
+| 0.05 | 2.5e-3 | 0.057511660 | 1.150233194 |
+| 0.025 | 6.25e-4 | 0.030345067 | 1.213802682 |
+| 0.0125 | 1.5625e-4 | 0.015374866 | 1.229989276 |
+| 0.00625 | 3.90625e-5 | 0.007712839 | 1.234054240 |
+| 0.003125 | 9.765625e-6 | 0.003859599 | 1.235071625 |
+
+The intercept of `Delta Q/epsilon` against `epsilon^2` estimates **`Delta Q'(0) = 1.23541`** for this Hamiltonian and observation window. A line through the two smallest magnitudes gives `1.235410753`. A quadratic in `epsilon^2` through the three smallest gives `1.235410855`, in agreement with a separate calculation that differentiated the propagator at `epsilon=0` on the same time grid.
+
+### 19.3 Numerical audit and reproduction
+
+The scripts evaluate each state directly by diagonalizing the 16-by-16 Hamiltonian. The initial perturbation check gives a maximum state-norm error of `1.55e-15`. Halving the trapezoidal integration interval from `0.002` to `0.001` changes its `Q03` values by at most `3.90e-8`. In the zero-field extrapolation, halving the interval from `0.001` to `0.0005` shifts the fitted intercepts by about `1.12e-7`.
+
+Run the three `run.py` scripts in order from their experiment folders with NumPy 2.0 or later and Matplotlib. Each folder contains its numerical output and figures.
+
+- Endpoint-field check. [Report](experiments/endpoint-field-2026-11-09/REPORT.md) · [Occupation residual](experiments/endpoint-field-2026-11-09/occupation.png) · [Seam-share comparisons](experiments/endpoint-field-2026-11-09/q03-comparisons.png)
+- Perturbation halving. [Report](experiments/endpoint-field-scaling-2026-11-09/REPORT.md) · [Scaling and symmetry error](experiments/endpoint-field-scaling-2026-11-09/q03-scaling.png)
+- Zero-field extrapolation. [Report](experiments/endpoint-field-zero-slope-2026-11-09/REPORT.md) · [Response versus epsilon squared](experiments/endpoint-field-zero-slope-2026-11-09/q03-zero-slope.png)
+
+## 20. Six-qubit extension and short-time seam-neighbor correlations (2026-11-09)
+
+The extension uses `Omega=1`, `J=0.7`, and the same weak-link strength `lambda=0.5` against the open reference `lambda=0`. Sites are numbered from the left. The initial state A has only the left endpoint excited in both sizes, `|1000>` and `|100000>`. Unless stated otherwise, integrated values use `T=3.688` and trapezoidal spacing `dt=0.001`.
+
+### 20.1 Antiunitary pairing and the zero-field slope
+
+For even `N`, let `R` be site reflection, `K` complex conjugation in the computational basis, and `Gamma_N = (product of all Z_i)(product of X_i on even sites)`. With `Theta_N = R Gamma_N K`, the perturbation `epsilon*(X_0 - X_(N-1))` gives
+
+```text
+Theta_N H(lambda,epsilon) Theta_N^-1 = -H(lambda,-epsilon)
+Theta_N exp[-it H(lambda,epsilon)] Theta_N^-1 = exp[-it H(lambda,-epsilon)]
+Theta_4 |1000> = -|0100>
+Theta_6 |100000> = |010100>
+```
+
+Conjugation by `Gamma_N` flips the transverse fields and the ZZ bonds, since every bond including the seam joins opposite site parities. Reflection swaps the endpoint fields. Antilinearity changes the sign of `i`, so the transformed evolution is at the same time. Reflection fixes the seam pair and preserves the sum of squared correlation differences. Consequently `Q_A(epsilon) = Q_B(-epsilon)` for the integrated seam share at both sizes. The maximum six-qubit sign-reversal discrepancy over the two time grids was `6.6e-15` or less.
+
+The same-sign difference is odd in `epsilon`. Define `I_ij = integral sum_a (C_ij^aa(lambda=0.5) - C_ij^aa(lambda=0))^2 dt`, `S = sum_(i<j) I_ij`, and `Q_A = I_seam/S` for initial state A. Its slope at zero field is
+
+```text
+chi_N = d[Q_A(epsilon) - Q_B(epsilon)]/d epsilon at epsilon=0
+      = 2 I_seam'/S - 2 I_seam S'/S^2
+```
+
+| Size | `2 I_seam'/S` | `-2 I_seam S'/S^2` | `chi_N` |
+|---:|---:|---:|---:|
+| 4 | 1.183264934 | +0.052145921 | 1.235410855 |
+| 6 | 2.502318543 | -0.259012235 | 2.243306307 |
+
+The propagator derivative and the extrapolation in `epsilon^2` agree within `8.3e-10` for six qubits on the primary grid. The normalized slope grows by a factor of `1.81584`. The unnormalized seam derivative falls from `0.21316` to `0.19190`, while `S(0)` falls from `0.360287` to `0.153382`. The comparison is for these initial states, the given observation window, and the all-pair normalization at each size.
+
+### 20.2 Which pairs account for the change in the denominator?
+
+At `epsilon=0`, match the two sites nearest each end by `0,1,2,3 -> 0,1,4,5`. Count the nine six-qubit pairs involving a central site separately. The two pairs with a two-edge path through the seam account for `89.20%` of the net reduction in `S` at `T=3.688`.
+
+| Pair in N=4 | Matched pair in N=6 | `I_4` | `I_6` | Reduction `I_4 - I_6` |
+|:---|:---|---:|---:|---:|
+| 02 | 04 | 0.111023 | 0.021517 | 0.089506 |
+| 13 | 15 | 0.121227 | 0.026164 | 0.095063 |
+| 03 (seam) | 05 (seam) | 0.014125 | 0.014155 | -0.000030 |
+| All pairs | All pairs | 0.360287 | 0.153382 | 0.206906 |
+
+On all 2,001 sampled values of `T` from `2.688` to `4.688`, these two matched pairs have the two largest decreases. Their combined decrease accounts for `88.68–101.38%` of the net change. Above 100%, the other pairs partially offset the decrease. Grouping all pairs at shortest distance two on the linked ring gives `75.36–88.71%` of the net change over the same window, without requiring a one-to-one match.
+
+### 20.3 Waveforms and the signed cross term
+
+For each matched pair and Pauli channel, write `I = U + V + W` with `U = integral C_0.5^2 dt`, `V = integral C_0^2 dt`, and `W = -2 integral C_0.5 C_0 dt`. Summed over both matched pairs and three channels, the six-qubit minus four-qubit changes are
+
+| Weak-link square `Delta U` | Open-chain square `Delta V` | Cross term `Delta W` | Squared difference `Delta I` |
+|---:|---:|---:|---:|
+| -0.848591 | -0.317507 | +0.981529 | -0.184569 |
+
+Both branch squares shrink by about 92%. The cross term becomes less negative overall and partially offsets their decrease. For `02 -> 04` in XX, `W` changes from `-0.54018` to `+0.00244`. For `13 -> 15`, YY and ZZ together account for about 85% of the decrease in `I`. The waveform report gives all 12 signed decompositions and the complete 24-trace data.
+
+### 20.4 Short-time series and the longer open-chain path
+
+At `epsilon=0`, the open-chain path for each matched pair changes from two edges to four. The linked branch retains a two-edge path through the seam. Exact rational arithmetic, with the product of the one-site expectations subtracted as a series, gives the first nonzero powers of the connected correlations.
+
+| Size and branch | XX | YY | ZZ |
+|:---|---:|---:|---:|
+| N=4, linked or open | 6 | 8 | 10 |
+| N=6, linked | 6 | 8 | 10 |
+| N=6, open | 14 | 16 | 18 |
+
+For the XX branch difference `C_0.5 - C_0`, the leading `t^6` coefficients agree across sizes, `-49/1800` for `02 -> 04` and `+49/1800` for `13 -> 15`. Cutting the central bond in the four-qubit linked graph verifies the separate two-edge route contributions to this coefficient. The finite-window XX integral difference therefore depends on higher-order waveform behavior. The YY and ZZ branch-difference coefficients are smaller in magnitude for the six-qubit matched pairs.
+
+The exact leading terms were checked against a separate Pauli-commutator calculation and finite-time Chebyshev propagation. At `t=0.0125`, the largest relative discrepancy `|C(t)/(a t^p) - 1|` was `1.69e-4` across all 24 cases. The report lists the exact coefficient of every leading term.
+
+### 20.5 Data and reproduction
+
+After running the three §19 stages in order, run `python -B run.py` from each of these experiment folders in the order listed. The first three require NumPy 2.0 or later. The short-time script uses the Python standard library.
+
+- Six-qubit symmetry and response. [Report](experiments/endpoint-field-six-qubit-2026-11-09/REPORT.md) · [Results](experiments/endpoint-field-six-qubit-2026-11-09/results.json)
+- Pair weights and time-window scan. [Report](experiments/seam-pair-time-window-2026-11-09/REPORT.md) · [Results](experiments/seam-pair-time-window-2026-11-09/results.json)
+- Branch waveforms and cross terms. [Report](experiments/seam-neighbor-waveforms-2026-11-09/REPORT.md) · [Results](experiments/seam-neighbor-waveforms-2026-11-09/results.json) · [Waveforms CSV](experiments/seam-neighbor-waveforms-2026-11-09/waveforms.csv)
+- Exact short-time series. [Report](experiments/seam-neighbor-short-time-2026-11-09/REPORT.md) · [Results](experiments/seam-neighbor-short-time-2026-11-09/results.json)
