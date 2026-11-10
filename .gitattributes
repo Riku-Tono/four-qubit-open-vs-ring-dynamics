@@ -1,0 +1,3 @@
+# Keep the frozen preparation and protocol hashes reproducible across checkouts.
+/experiments/open-chain-phase-persistence-2026-11-10/selection.json -text
+/experiments/open-chain-phase-persistence-2026-11-10/PROTOCOL.md text eol=lf

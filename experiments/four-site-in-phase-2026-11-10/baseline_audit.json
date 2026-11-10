@@ -1,0 +1,9 @@
+{
+  "saved_phase_metrics_max_difference": {
+    "coverage": 0.0,
+    "site_amplitude": 1.7763568394002505e-15,
+    "plv": 8.715250743307479e-15,
+    "lag_deg": 3.410605131648481e-13
+  },
+  "uniform_basis_occupation_symmetry_max_error": 9.992007221626409e-16
+}

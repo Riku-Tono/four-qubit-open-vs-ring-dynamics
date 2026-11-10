@@ -1,0 +1,104 @@
+{
+  "omega": 1.0,
+  "initial": "1000",
+  "axis_convention": "beta from X toward Y in the XY plane",
+  "phase_convention": "phi = -pi/2 - beta modulo 2*pi",
+  "windows": {
+    "short": [
+      0.0,
+      3.688
+    ],
+    "long": [
+      0.0,
+      25.132741228718345
+    ]
+  },
+  "beta_step_deg": 0.25,
+  "validation_dt_target": 0.002,
+  "checks": [
+    {
+      "topology": "open",
+      "J": 0.0,
+      "window": "short",
+      "uncoupled_analytic_gram": 8.326672684688674e-17,
+      "sweep_grid_min_angle_deg": 0.0,
+      "gram_vs_trapezoid": 2.006339004656521e-08,
+      "gram_vs_half_step": 5.015846279987635e-09,
+      "finite_angle_odd_waveform": 1.0285085176661983e-16,
+      "finite_angle_paired_mean_square": 1.0075071591810736e-18
+    },
+    {
+      "topology": "open",
+      "J": 0.0,
+      "window": "long",
+      "uncoupled_analytic_gram": 1.025240448629486e-16,
+      "sweep_grid_min_angle_deg": 0.0,
+      "gram_vs_trapezoid": 1.2595013686672826e-16,
+      "gram_vs_half_step": 1.942890293094024e-15,
+      "finite_angle_odd_waveform": 1.3040554356096117e-16,
+      "finite_angle_paired_mean_square": 2.1124649297176998e-18
+    },
+    {
+      "topology": "open",
+      "J": 0.7,
+      "window": "short",
+      "sweep_grid_min_angle_deg": 0.08380869173218741,
+      "gram_vs_trapezoid": 9.151061790280135e-09,
+      "gram_vs_half_step": 2.2877646166374888e-09,
+      "finite_angle_odd_waveform": 1.2836953722228372e-16,
+      "finite_angle_paired_mean_square": 4.590088999983628e-19
+    },
+    {
+      "topology": "open",
+      "J": 0.7,
+      "window": "long",
+      "sweep_grid_min_angle_deg": 0.09575007250717249,
+      "gram_vs_trapezoid": 1.834839391534615e-09,
+      "gram_vs_half_step": 4.587100178865544e-10,
+      "finite_angle_odd_waveform": 1.6653345369377348e-16,
+      "finite_angle_paired_mean_square": 5.819705260934146e-20
+    },
+    {
+      "topology": "ring",
+      "J": 0.0,
+      "window": "short",
+      "uncoupled_analytic_gram": 1.1102230246251565e-16,
+      "sweep_grid_min_angle_deg": 0.0,
+      "gram_vs_trapezoid": 2.0063390088198574e-08,
+      "gram_vs_half_step": 5.0158463632543615e-09,
+      "finite_angle_odd_waveform": 8.326672684688674e-17,
+      "finite_angle_paired_mean_square": 1.2258794893893522e-18
+    },
+    {
+      "topology": "ring",
+      "J": 0.0,
+      "window": "long",
+      "uncoupled_analytic_gram": 1.039679294251116e-16,
+      "sweep_grid_min_angle_deg": 0.0,
+      "gram_vs_trapezoid": 8.38746823772691e-17,
+      "gram_vs_half_step": 1.970645868709653e-15,
+      "finite_angle_odd_waveform": 1.2067857211231947e-16,
+      "finite_angle_paired_mean_square": 2.9539948561217676e-18
+    },
+    {
+      "topology": "ring",
+      "J": 0.7,
+      "window": "short",
+      "sweep_grid_min_angle_deg": 0.01540214916281002,
+      "gram_vs_trapezoid": 2.412865067469294e-09,
+      "gram_vs_half_step": 6.03215838390625e-10,
+      "finite_angle_odd_waveform": 9.8879238130678e-17,
+      "finite_angle_paired_mean_square": 1.1638036367986606e-18
+    },
+    {
+      "topology": "ring",
+      "J": 0.7,
+      "window": "long",
+      "sweep_grid_min_angle_deg": 0.05615246726131318,
+      "gram_vs_trapezoid": 2.608409668813927e-10,
+      "gram_vs_half_step": 6.521018794392042e-11,
+      "finite_angle_odd_waveform": 1.1275702593849246e-16,
+      "finite_angle_paired_mean_square": 2.9992090258418103e-19
+    }
+  ]
+}

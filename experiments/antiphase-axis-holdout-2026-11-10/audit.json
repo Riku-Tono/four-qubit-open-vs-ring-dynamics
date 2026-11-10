@@ -1,0 +1,124 @@
+{
+  "omega": 1.0,
+  "J": 0.7,
+  "initial": "1000",
+  "theta_rad": [
+    0.0,
+    0.1,
+    -0.1,
+    0.2,
+    -0.2
+  ],
+  "windows": {
+    "train": [
+      0.0,
+      3.688
+    ],
+    "holdout_a": [
+      3.688,
+      25.132741228718345
+    ],
+    "holdout_b": [
+      25.132741228718345,
+      50.26548245743669
+    ]
+  },
+  "fixed_axis_source": "../antiphase-axis-optimization-2026-11-10/optima.csv (J=0.7, short only)",
+  "fixed_beta_deg": {
+    "open": 58.58380869173219,
+    "ring": 33.01540214916281
+  },
+  "sweep_step_deg": 0.25,
+  "checks": [
+    {
+      "topology": "open",
+      "window": "train",
+      "t_start": 0.0,
+      "t_end": 3.688,
+      "time_grid_points": 3689,
+      "time_grid_dt": 0.001,
+      "gram_vs_trapezoid": 2.2877647103125565e-09,
+      "mean_vs_trapezoid": 5.7077877979594405e-09,
+      "std_vs_trapezoid": 6.194371848788904e-09,
+      "residual_rms_vs_trapezoid": 2.8345124979817227e-09,
+      "zero_angle_max_abs": 1.5543122344752192e-15,
+      "pair_mse_reconstruction": 5.748982019604387e-16,
+      "half_range_change_under_dt_halving": 9.421465990699929e-08
+    },
+    {
+      "topology": "open",
+      "window": "holdout_a",
+      "t_start": 3.688,
+      "t_end": 25.132741228718345,
+      "time_grid_points": 21445,
+      "time_grid_dt": 0.0010000345657861232,
+      "gram_vs_trapezoid": 3.9225513202151285e-10,
+      "mean_vs_trapezoid": 9.192892558296251e-10,
+      "std_vs_trapezoid": 6.776129934937813e-10,
+      "residual_rms_vs_trapezoid": 3.0793396998962663e-10,
+      "zero_angle_max_abs": 2.886579864025407e-15,
+      "pair_mse_reconstruction": 6.649954024939841e-16,
+      "half_range_change_under_dt_halving": 1.4512977469793853e-07
+    },
+    {
+      "topology": "open",
+      "window": "holdout_b",
+      "t_start": 25.132741228718345,
+      "t_end": 50.26548245743669,
+      "time_grid_points": 25133,
+      "time_grid_dt": 0.0010000294934222609,
+      "gram_vs_trapezoid": 7.463796906914677e-10,
+      "mean_vs_trapezoid": 6.532069329878709e-10,
+      "std_vs_trapezoid": 2.771498586184862e-10,
+      "residual_rms_vs_trapezoid": 4.43906779390435e-10,
+      "zero_angle_max_abs": 9.2148511043888e-15,
+      "pair_mse_reconstruction": 7.669646168162458e-16,
+      "half_range_change_under_dt_halving": 1.7825427872653066e-07
+    },
+    {
+      "topology": "ring",
+      "window": "train",
+      "t_start": 0.0,
+      "t_end": 3.688,
+      "time_grid_points": 3689,
+      "time_grid_dt": 0.001,
+      "gram_vs_trapezoid": 6.032159424740335e-10,
+      "mean_vs_trapezoid": 2.2745972882987076e-09,
+      "std_vs_trapezoid": 4.739639680728658e-09,
+      "residual_rms_vs_trapezoid": 1.424112411330114e-09,
+      "zero_angle_max_abs": 1.7763568394002505e-15,
+      "pair_mse_reconstruction": 8.129347889296312e-16,
+      "half_range_change_under_dt_halving": 1.483333655905028e-07
+    },
+    {
+      "topology": "ring",
+      "window": "holdout_a",
+      "t_start": 3.688,
+      "t_end": 25.132741228718345,
+      "time_grid_points": 21445,
+      "time_grid_dt": 0.0010000345657861232,
+      "gram_vs_trapezoid": 4.168975407947695e-11,
+      "mean_vs_trapezoid": 3.7081371306868505e-10,
+      "std_vs_trapezoid": 4.281583698695357e-10,
+      "residual_rms_vs_trapezoid": 6.407742739189537e-11,
+      "zero_angle_max_abs": 2.7755575615628914e-15,
+      "pair_mse_reconstruction": 7.045687817897051e-16,
+      "half_range_change_under_dt_halving": 1.465056505001172e-07
+    },
+    {
+      "topology": "ring",
+      "window": "holdout_b",
+      "t_start": 25.132741228718345,
+      "t_end": 50.26548245743669,
+      "time_grid_points": 25133,
+      "time_grid_dt": 0.0010000294934222609,
+      "gram_vs_trapezoid": 2.4052144499166206e-10,
+      "mean_vs_trapezoid": 1.0968438379777012e-09,
+      "std_vs_trapezoid": 1.2032110030535392e-09,
+      "residual_rms_vs_trapezoid": 1.5117661983365949e-10,
+      "zero_angle_max_abs": 5.329070518200751e-15,
+      "pair_mse_reconstruction": 5.8687863596640355e-16,
+      "half_range_change_under_dt_halving": 2.1311379611033132e-07
+    }
+  ]
+}

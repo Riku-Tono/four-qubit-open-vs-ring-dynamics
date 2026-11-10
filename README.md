@@ -6,6 +6,10 @@
 
 **Short-time extension.** Sections 21–24 use the initial state `|10...0>` to study distance-dependent connected correlations on open chains and weak rings. Section 24 classifies the weak-link strengths that cancel the leading YY or ZZ term for every antipodal pair of an even ring. [Distance laws and cancellation roots](#21-eight-qubit-check-of-the-distance-rule-2026-11-09)
 
+**Rotation-axis extension.** Sections 25–27 track the occupation-sum residual of an antiphase pair after rotating site 0 of the initial state $\lvert1000\rangle$. In the later-window tests, the short-window axis beats both pure axes only in the first open-chain window. The long-time optimum is Y for the open chain and X for the full ring. [Rotation-axis results](#25-complementary-occupations-and-signed-site-0-rotations-2026-11-10)
+
+**In-phase occupations and preparation errors.** Sections 29–31 follow a four-site product state whose open-chain occupations stay in phase through the 24 held-out windows ending at $256\pi$. The first PLV failure on the tested 0.001 rad grid occurs at 0.091 rad, on pair 03 in four of 496 fixed error directions. [In-phase results](#29-four-site-in-phase-occupations-and-long-window-validation-2026-11-10) · [PLV boundary](#31-independent-angle-errors-and-the-first-plv-failure-2026-11-10)
+
 ## 1. What is being compared
 
 Two branches, both starting at `t=0` from `|0000>`, both evolved under their own fixed Hamiltonian for the whole observation window:
@@ -673,3 +677,117 @@ Each cancelling pair has distinct simple roots with `lambda_YY < lambda_ZZ`. Eac
 | 10 | `(0,5)` | 0.012253477 | 0.016005605 |
 
 The general formulas match all 40 YY and ZZ antipodal polynomials from an exact state-vector calculation at `N=4,6,8,10,12`. Run `python -B formulas.py` for root values and exact finite comparisons, and `python -B verify.py` for the state-vector calculation. [General formulas and proof](experiments/antipodal-cancellation-2026-11-09/REPORT.md) · [Exact verification](experiments/antipodal-cancellation-2026-11-09/verify.py)
+
+## 25. Complementary occupations and signed site-0 rotations (2026-11-10)
+
+This extension starts from $\lvert1000\rangle$ with $N=4$ and $\Omega=1$. The open chain has bonds $01,12,23$. The full ring adds $30$ with the same $J/2$ coefficient as the other ZZ bonds. A local rotation changes the preparation of site 0 before the time-independent evolution. The residual is $\delta=R_0+R_k-1$, with $k=3$ for the open chain and $k=2$ for the ring.
+
+Without rotation, the pair sum is exactly one at all times. The open-chain proof uses the linear Majorana evolution at either endpoint. The ring proof combines a half-turn, the product of all Z operators, an even-site X flip, and complex conjugation. Removing the spectral DC term gives opposite analytic signals for the two sites, so their phases differ by $\pi$ wherever the signals are nonzero. [Occupation and phase measurements](experiments/phase-alignment-2026-11-10/REPORT.md) · [Exact complementarity proofs](experiments/antiphase-constraints-2026-11-10/REPORT.md)
+
+Write $A=\lvert1000\rangle$, $B=\lvert0000\rangle$, $S(t)=e^{itH}(Z_0+Z_k)e^{-itH}$, and $C(t)=\langle A|S(t)|B\rangle$. In the preparation $\cos(\theta/2)A+e^{i\phi}\sin(\theta/2)B$, X rotation has $\phi=-\pi/2$ and Y rotation has $\phi=\pi$. Complementarity gives $\langle A|S(t)|A\rangle=0$, so the signed-angle decomposition is exact.
+
+~~~text
+delta_even = -sin(theta/2)^2 <B|S(t)|B>/2
+delta_odd  = sin(theta) L_phi(t)
+L_phi(t)  = -(Re C(t) cos(phi) - Im C(t) sin(phi))/2
+~~~
+
+X selects the imaginary part with coefficient $-1/2$ and Y selects the real part with coefficient $+1/2$. The leading short-time terms in $L_X,L_Y$ are $-\Omega t/2$ and $d_0\Omega Jt^2/4$, respectively, where $d_0=1$ for the chain and $2$ for the ring. At $J=0$, the Y odd component vanishes exactly while the X odd component persists. At $J=0.7$, $\lvert\theta\rvert=0.20$, and $0\le t\le3.688$, the sampled maximum absolute odd residual for X and Y is $0.082660$ and $0.053852$ on the chain, and $0.060063$ and $0.076201$ on the ring.
+
+The rotation comparison reports phase concentration separately from the occupation-sum residual. On the chain at $\theta=+0.20$ in the short window, X gives a higher phase-locking value (0.999997 versus 0.996181) while Y gives a mean absolute phase difference closer to $180^\circ$ ($171.98^\circ$ versus $169.05^\circ$). Both axes were evaluated on the same time samples where all four sites passed the envelope threshold. [Y rotation](experiments/antiphase-y-rotation-2026-11-10/REPORT.md) · [Signed Y rotation](experiments/antiphase-y-signed-2026-11-10/REPORT.md) · [X/Y comparison and derivation](experiments/antiphase-xy-rotation-2026-11-10/REPORT.md) · [Signed residuals](experiments/antiphase-xy-rotation-2026-11-10/residuals.csv) · [Phase metrics](experiments/antiphase-xy-rotation-2026-11-10/phases.csv)
+
+## 26. Finite-window rotation axes and later-window validation (2026-11-10)
+
+For a rotation axis at angle $\beta$ from X toward Y in the XY plane, $\phi=-\pi/2-\beta$. Let $f=(L_X,L_Y)^{\mathsf T}$, $v=(\cos\beta,\sin\beta)^{\mathsf T}$, and $G_W=\langle ff^{\mathsf T}\rangle_W$ on a time window $W$. The time RMS of the angular slope is $\sqrt{v^{\mathsf T}G_Wv}$. The eigenvector of the smaller eigenvalue gives the optimal axis modulo $180^\circ$. The same axis minimizes the odd residual RMS at the tested nonzero rotation angles. It also minimizes the total RMS pooled over the two signs because pooling the mean squares cancels the even–odd cross term. A single signed angle retains that term.
+
+At $J=0.7$, the axes selected on $[0,3.688]$ were $58.584^\circ$ for the chain and $33.015^\circ$ for the ring. The later-window test uses the saved full-precision angles throughout. The baseline in each window is the pure X or Y axis with the lower slope RMS.
+
+| Topology | Evaluation window | Fixed-axis slope RMS | Better pure axis | Reduction versus that axis |
+|:---|:---|---:|:---|---:|
+| Open | $[0,3.688]$ | 0.068484 | Y | +59.19% |
+| Open | $(3.688,8\pi]$ | 0.149640 | Y | +3.08% |
+| Open | $(8\pi,16\pi]$ | 0.181878 | Y | −4.36% |
+| Ring | $[0,3.688]$ | 0.097438 | X | +41.89% |
+| Ring | $(3.688,8\pi]$ | 0.105333 | X | −9.06% |
+| Ring | $(8\pi,16\pi]$ | 0.133724 | X | −16.69% |
+
+**The short-window advantage did not persist.** The fixed axis beat both pure axes only in the first later window on the chain. The same win/loss pattern held for the total residual at each tested sign and magnitude ($\pm0.10,\pm0.20$). The reports also separate occupation amplitude from cancellation between the two site traces. In the first later chain window at $\theta=-0.20$, the fixed axis widened the gap between the two site standard deviations relative to X. Stronger anticorrelation contributed to a small reduction in total RMS, from $0.030858$ to $0.030664$. The separately fitted later-window axes serve as diagnostics for how far the fixed axes are from the window minima. [Axis sweep and optimization](experiments/antiphase-axis-optimization-2026-11-10/REPORT.md) · [Later-window report](experiments/antiphase-axis-holdout-2026-11-10/REPORT.md) · [RMS comparison](experiments/antiphase-axis-holdout-2026-11-10/rms-comparison.png) · [Fixed and diagnostic axes](experiments/antiphase-axis-holdout-2026-11-10/regret.csv)
+
+## 27. Long-time limit of the occupation-residual Gram matrix (2026-11-10)
+
+At the same $J=0.7,\Omega=1$, the spectral calculation adds the coefficients of exactly equal signed energy gaps before squaring. Integer characteristic polynomials and rational isolating intervals distinguish equal gaps from close but distinct ones. Symmetry leaves four positive frequencies in the open-chain slope signals and ten in the ring slope signals. $L_X$ is a sum of sines and $L_Y$ a sum of cosines, so their product has zero infinite-time mean, including the terms with equal frequency. The two diagonal entries were independently evaluated in rational arithmetic.
+
+| Topology | Exact $G_{\infty,XX}$ | Exact $G_{\infty,YY}$ | Optimal axis | Minimum slope RMS | Reduction versus the better pure axis |
+|:---|---:|---:|:---|---:|---:|
+| Open | $318475/9741742$ | $758225/29225226$ | Y | 0.161072022 | 0% |
+| Ring | $3290125/236511872$ | $5858025/236511872$ | X | 0.117945052 | 0% |
+
+The limiting eigenvalue gaps are $0.006748$ on the chain and $0.010857$ on the ring. The limiting axes are unique modulo $180^\circ$. The chain has the smaller eigenvalue separation and its optimal direction is more sensitive to a perturbation of comparable size in the Gram matrix.
+
+| Cumulative endpoint $T$ | Open axis / reduction | Ring axis / reduction |
+|:---|:---|:---|
+| $8\pi$ | $56.35^\circ$ / 10.12% | $20.44^\circ$ / 8.67% |
+| $16\pi$ | $68.74^\circ$ / 2.38% | $11.06^\circ$ / 2.53% |
+| $32\pi$ | $79.16^\circ$ / 0.52% | $12.76^\circ$ / 2.97% |
+| $64\pi$ | $83.84^\circ$ / 0.14% | $12.43^\circ$ / 2.28% |
+
+The ring's finite-window axis and reduction vary nonmonotonically. The difference between the distinct ring frequencies $0.34698748$ and $0.36127247$ gives a beat period of about $439.85$, and this difference-frequency term accounts for about 87% of $G_{XY}(64\pi)$. On the prespecified later window $(32\pi,64\pi]$, the axes chosen in the infinite-time limit were held fixed. The open-chain Y RMS was $0.160511075$ versus X at $0.176888200$. The ring X RMS was $0.119572545$ versus Y at $0.155916812$. In both cases the fixed axis remained the better pure axis on that window. [Long-time derivation and audit](experiments/antiphase-axis-long-time-2026-11-10/REPORT.md) · [Convergence figure](experiments/antiphase-axis-long-time-2026-11-10/long-time-convergence.png) · [Finite-window results](experiments/antiphase-axis-long-time-2026-11-10/convergence.csv) · [Fixed-axis results](experiments/antiphase-axis-long-time-2026-11-10/late_holdout.csv)
+
+### Reproduction
+
+With NumPy 2 or later, run `python -B run.py` in each of the four folders below in order. The later-window validation reads the full-precision short-window axes from the optimization folder's `optima.csv`. Run `python -B plot.py` in each folder with Matplotlib to regenerate its figures.
+
+1. [Signed X/Y rotation](experiments/antiphase-xy-rotation-2026-11-10/run.py)
+2. [Finite-window axis optimization](experiments/antiphase-axis-optimization-2026-11-10/run.py)
+3. [Fixed-axis later-window validation](experiments/antiphase-axis-holdout-2026-11-10/run.py)
+4. [Long-time limit and cumulative windows](experiments/antiphase-axis-long-time-2026-11-10/run.py) · [Exact gap and moment calculations](experiments/antiphase-axis-long-time-2026-11-10/spectral_groups.py)
+
+## 28. Uniform-coupling crossover in connected correlations (2026-11-10)
+
+With $N=4$, $\Omega=1$, and $\lvert0000\rangle$, both branches use the same coefficient $J/2$ on every existing ZZ bond. On $[0,3.688]$, rank each pair by the time RMS of its three-axis connected-correlation difference. For $1\le J\le2$, the largest pair changes from the closing bond $03$ to the central bond $12$ near $J=1.26765$, then to the tied outer bonds $01,23$ near $J=1.57203$. At the second crossover, the outer bonds' larger ZZ contribution offsets their smaller XX and YY contributions. The crossing shifts with the observation window. [Uniform-coupling sweep](experiments/uniform-coupling-sweep-2026-11-10/REPORT.md) · [Crossover scan](experiments/uniform-coupling-crossover-2026-11-10/REPORT.md) · [Time-window decomposition](experiments/crossover-time-window-2026-11-10/REPORT.md)
+
+## 29. Four-site in-phase occupations and long-window validation (2026-11-10)
+
+For the time-independent model at $N=4$, $\Omega=1$, and $J=0.7$, the search allows independent local Bloch angles for all four sites. For each window, all sites must have an occupation half-range of at least $g$, and all four analytic-signal envelopes must reach $g$ simultaneously for at least 90% of the window. On those times, all six pairs must have a circular mean phase difference within $\pm15^\circ$ and a phase-locking value (PLV) of at least 0.95. The tested floors are $g=0.025,0.05,0.10$. [Four-site search and baselines](experiments/four-site-in-phase-2026-11-10/REPORT.md)
+
+On the ring, identical local preparations give identical occupation traces by translation symmetry. The first open-chain search chose a state on $[0,3.688]$ whose PLV and envelope coverage fell below threshold on the disjoint window $[3.688,8\pi]$. A follow-up search selected a mirror-symmetric product on eight $8\pi$ windows over $[0,64\pi]$, then held it fixed for 24 new windows over $[64\pi,256\pi]$. [Long-window report](experiments/open-chain-phase-persistence-2026-11-10/REPORT.md) · [Frozen initial angles](experiments/open-chain-phase-persistence-2026-11-10/selection.json) · [Occupation and envelope figure](experiments/open-chain-phase-persistence-2026-11-10/occupations-envelope.png)
+
+| Fixed open-chain preparation, $g=0.05$ | Held-out windows passed | Largest absolute mean lag | Lowest PLV | Lowest window coverage |
+|:---|---:|---:|---:|---:|
+| Selected on the short window | 9/24 | $7.602^\circ$ | 0.939657 | 68.14% |
+| Selected across eight windows | 24/24 | $0.201^\circ$ | 0.999365 | 100% |
+
+The eight-window state also passed all 24 windows at the other two floors. The minimum envelope on the held-out interval was 0.241902. Its Bloch angles $(\theta,\phi)$ in radians are $(1.028786,-0.012331)$ at sites 0 and 3, and $(0.848414,-0.010693)$ at sites 1 and 2. The selection file stores the full precision.
+
+## 30. Spectral mechanism and angle-error controls (2026-11-10)
+
+Grouping equal energy gaps yields 20 positive frequencies across the four occupation observables. For the frozen open-chain state, the shared line $\omega_*=0.502392496$ carries 99.879% of the oscillatory power at the ends and 99.826% at the interior sites. Its amplitudes are 0.255065 and 0.336237, with an end–interior phase difference of $-0.00177^\circ$. The sum of the other amplitudes gives a numerical envelope lower bound of 0.241788 across sites. A phase bound using those residual magnitudes independently gives $8.081^\circ$, so the shared line is strong enough to account for persistent phase agreement. The weaker lines set the instantaneous fluctuations. The interior-only line at $1.761139$ accounts for about 59.4% of their first-order phase variance in the frozen state. [Spectral derivation](experiments/open-chain-phase-spectrum-robustness-2026-11-10/REPORT.md) · [Frequency coefficients](experiments/open-chain-phase-spectrum-robustness-2026-11-10/spectrum.csv) · [Spectrum and line removal](experiments/open-chain-phase-spectrum-robustness-2026-11-10/spectrum.png)
+
+The fixed-state error controls include 625 preparations on a mirror-symmetric angle grid and 32 single-site perturbations, with angle offsets of up to 0.05 rad. All 657 preparations pass all 24 windows at all three floors. The worst mean phase difference is $0.919^\circ$, the lowest PLV is 0.993658, and the minimum envelope is 0.215882. [Angle-error results](experiments/open-chain-phase-spectrum-robustness-2026-11-10/robustness_summary.csv)
+
+## 31. Independent angle errors and the first PLV failure (2026-11-10)
+
+The independent-error sweep applies fixed directions to all eight Bloch angles without retuning the preparation. Each width uses the same 240 reflection-breaking sign corners and 256 independent uniform draws. The coarser sweep passed through 0.075 rad and found six failing directions at 0.100 rad. The refined sweep evaluates all 496 directions at each of 26 widths from 0.075 to 0.100 rad in 0.001 rad steps, using the same 24 windows and three floors. [Independent-error sweep](experiments/open-chain-independent-angle-errors-2026-11-10/REPORT.md) · [Refined PLV scan](experiments/open-chain-plv-onset-2026-11-10/REPORT.md) · [All 26 widths](experiments/open-chain-plv-onset-2026-11-10/width_summary.csv)
+
+Every direction passes through 0.090 rad. At **0.091 rad**, four directions each fail one window, always on endpoint pair $03$. All three floors give the same result and the common envelope coverage is 100%.
+
+| Direction IDs | Failing window | PLV at 0.090 rad | PLV at 0.091 rad |
+|:---|:---|---:|---:|
+| `c090`, `c165` | $[104\pi,112\pi]$ | 0.950412 | 0.949324 |
+| `c015`, `c240` | $[152\pi,160\pi]$ | 0.950633 | 0.949551 |
+
+Removing the $0.930636$ line produces the largest PLV recovery, to 0.997769 and 0.997730 in the two failing windows, and restores all 24 windows for the four directions. Keeping only the carrier and $0.930636$ also passes, with PLVs 0.954651 and 0.955004 in those windows. The weaker endpoint lines at $1.332896$ and $1.604652$ contribute to the threshold crossing. The boundary describes the tested directions and width grid. [First failing conditions](experiments/open-chain-plv-onset-2026-11-10/first_witnesses.csv) · [PLV onset figure](experiments/open-chain-plv-onset-2026-11-10/plv-onset.png) · [Line-removal figure](experiments/open-chain-plv-onset-2026-11-10/onset-ablations.png)
+
+### Reproducing the in-phase results
+
+Use NumPy 2 or later and Matplotlib. Each command runs from its experiment folder. The frozen selections and compact outputs are included with the code. The three larger arrays listed below can be regenerated by the corresponding command.
+
+| Experiment | Commands in order | Large generated output |
+|:---|:---|:---|
+| [Four-site search](experiments/four-site-in-phase-2026-11-10/REPORT.md) | `python -B baseline.py`, `python -B run.py`, `python -B plot.py` | |
+| [Long-window validation](experiments/open-chain-phase-persistence-2026-11-10/REPORT.md) | `python -B run.py evaluate`, `python -B plot.py` | `waveforms.csv` from `evaluate` |
+| [Spectral mechanism and angle controls](experiments/open-chain-phase-spectrum-robustness-2026-11-10/REPORT.md) | `python -B spectrum.py`, `python -B majorana.py`, `python -B robustness.py`, `python -B plot.py` | |
+| [Independent errors](experiments/open-chain-independent-angle-errors-2026-11-10/REPORT.md) | `python -B sweep.py`, `python -B diagnostics.py`, `python -B plot.py` | `window_metrics.csv.gz` from `sweep.py` |
+| [Refined PLV onset](experiments/open-chain-plv-onset-2026-11-10/REPORT.md) | `python -B scan.py`, `python -B diagnostics.py`, `python -B plot.py` | `all_windows.npz` from `scan.py` |
+
+To repeat the eight-window selection, run `python -B run.py select` in the long-window validation folder before `evaluate`. The published `selection.json` is the reference for the downstream perturbation experiments.
