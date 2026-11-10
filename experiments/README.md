@@ -1,82 +1,86 @@
-# 追加実験の目次
+# Additional experiments
 
-2026年11月9日・10日の実験をテーマ別にまとめています。各レポートに計算条件、結果、検証方法、保存データの説明があります。4量子ビットの基準実験と8月の追加解析は、それぞれのReleaseから再現用ZIPを取得できます。[7月の基準実験](https://github.com/Riku-Tono/four-qubit-open-vs-ring-dynamics/releases/tag/v0.1.0-n4-fixed) · [8月の追加解析](https://github.com/Riku-Tono/four-qubit-open-vs-ring-dynamics/releases/tag/v0%2C2)
+[日本語](README.md)
 
-- [端点横磁場への応答](#端点横磁場への応答)
-- [継ぎ目近傍の波形と短時間展開](#継ぎ目近傍の波形と短時間展開)
-- [連結相関の距離則と相殺](#連結相関の距離則と相殺)
-- [一様結合強度と相関差](#一様結合強度と相関差)
-- [逆位相ペアと局所回転](#逆位相ペアと局所回転)
-- [4サイトの同位相と初期角度誤差](#4サイトの同位相と初期角度誤差)
+This index groups the experiments from November 9 and 10, 2026 by topic. The reports describe the calculation settings, results, validation, and saved data. The four-qubit baseline and the August extensions each have a reproducibility ZIP on their release page. [July baseline](https://github.com/Riku-Tono/four-qubit-open-vs-ring-dynamics/releases/tag/v0.1.0-n4-fixed) · [August extensions](https://github.com/Riku-Tono/four-qubit-open-vs-ring-dynamics/releases/tag/v0%2C2)
 
-## 実行方法
+- [Response to transverse fields at the endpoints](#response-to-transverse-fields-at-the-endpoints)
+- [Waveforms and short-time expansions near the seam](#waveforms-and-short-time-expansions-near-the-seam)
+- [Distance laws and cancellation in connected correlations](#distance-laws-and-cancellation-in-connected-correlations)
+- [Uniform coupling strength and correlation differences](#uniform-coupling-strength-and-correlation-differences)
+- [Antiphase pairs and local rotations](#antiphase-pairs-and-local-rotations)
+- [In-phase oscillations and preparation-angle errors on four sites](#in-phase-oscillations-and-preparation-angle-errors-on-four-sites)
 
-隣接フォルダのコードや保存済みデータを参照する実験があるため、リポジトリ全体を取得してください。各表の実行順に従い、対応する実験フォルダで各項目の先頭に `python -B` を付けて実行します。スクリプトが結果ファイルを再生成するため、保存済みの結果も参照したい場合は作業用コピーで実行してください。
+## How to run
 
-たとえば、リポジトリのルートから開放鎖の距離則を検証する手順です。
+Download or clone the entire repository. Some experiments use code or saved results from neighboring directories. Run each listed script in order from the corresponding experiment directory, with `python -B` before the script name and any arguments. The scripts regenerate result files, so use a working copy if you want to refer back to the archived results.
+
+To verify the open-chain distance law, start from the repository root and run the following commands.
 
 ```sh
 cd experiments/open-chain-distance-law-2026-11-09
 python -B verify.py
 ```
 
-数値計算には主に NumPy 2 系を使います。`plot.py` と端点磁場の最初の3実験の `run.py` には Matplotlib も必要です。標準ライブラリで実行できる実験は下に記載しています。実験ごとの条件や入力は各レポートを参照してください。
+Most numerical experiments use NumPy 2.x. The plotting scripts and the first three endpoint-field experiments also require Matplotlib. The tables identify the experiments that use the Python standard library. See each report for the calculation settings and required inputs.
 
-## 端点横磁場への応答
+## Response to transverse fields at the endpoints
 
-| レポート | 調べたこと | 実行順 |
+| Report | What it examines | Scripts in order |
 | --- | --- | --- |
-| [4量子ビットの端点磁場と反ユニタリ対称性](endpoint-field-2026-11-09/REPORT.md) | 端点の横磁場の符号と相関差の関係 | `run.py` |
-| [逆方向の端点磁場と継ぎ目シェアのスケーリング](endpoint-field-scaling-2026-11-09/REPORT.md) | 磁場強度を変えたときの継ぎ目ペアの寄与 | `run.py` |
-| [4量子ビットでの継ぎ目シェアの線形応答](endpoint-field-zero-slope-2026-11-09/REPORT.md) | 弱い磁場に対する一次応答の外挿 | `run.py` |
-| [6量子ビットでの継ぎ目シェアの線形応答](endpoint-field-six-qubit-2026-11-09/REPORT.md) | 4量子ビットとの比較と積分刻みの照合 | `run.py` |
+| [Four-qubit endpoint fields and antiunitary symmetry](endpoint-field-2026-11-09/REPORT.md) | How the signs of the transverse fields at the endpoints affect correlation differences | `run.py` |
+| [Opposite endpoint fields and scaling of the seam pair's share](endpoint-field-scaling-2026-11-09/REPORT.md) | How the seam pair's contribution varies with field strength | `run.py` |
+| [Linear response of the seam pair's share for four qubits](endpoint-field-zero-slope-2026-11-09/REPORT.md) | Extrapolating the first-order response to a weak field | `run.py` |
+| [Linear response of the seam pair's share for six qubits](endpoint-field-six-qubit-2026-11-09/REPORT.md) | Comparison with the four-qubit case and a check at two integration step sizes | `run.py` |
 
-## 継ぎ目近傍の波形と短時間展開
+## Waveforms and short-time expansions near the seam
 
-| レポート | 調べたこと | 実行順 |
+| Report | What it examines | Scripts in order |
 | --- | --- | --- |
-| [全ペア積分の4→6量子ビット差と観測時間](seam-pair-time-window-2026-11-09/REPORT.md) | 全体の差に効くペアと観測窓による変化 | `run.py` |
-| [継ぎ目をまたぐ2組の相関波形](seam-neighbor-waveforms-2026-11-09/REPORT.md) | 開放鎖とリングの波形および二乗積分の内訳 | `run.py` |
-| [継ぎ目をまたぐ2組の短時間展開](seam-neighbor-short-time-2026-11-09/REPORT.md) | 厳密級数の先頭項と経路長の関係 | `run.py`（標準ライブラリ） |
+| [All-pair integrals for four and six qubits across time windows](seam-pair-time-window-2026-11-09/REPORT.md) | Which pairs contribute to the overall difference and how their contributions vary with the observation window | `run.py` |
+| [Correlation waveforms for two pairs near the seam](seam-neighbor-waveforms-2026-11-09/REPORT.md) | Open-chain and ring waveforms and the contributions to the integrated squared difference | `run.py` |
+| [Short-time expansions for two pairs near the seam](seam-neighbor-short-time-2026-11-09/REPORT.md) | How path length relates to the leading terms of the exact series | `run.py` (standard library) |
 
-## 連結相関の距離則と相殺
+## Distance laws and cancellation in connected correlations
 
-この節のスクリプトは Python の標準ライブラリと保存済みの実験ファイルを使います。
+The scripts in this section use the Python standard library and saved experiment files.
 
-| レポート | 調べたこと | 実行順 |
+| Report | What it examines | Scripts in order |
 | --- | --- | --- |
-| [8量子ビットでの経路長と連結相関の先頭次数](seam-neighbor-eight-qubit-2026-11-09/REPORT.md) | 8量子ビットの開放鎖・リングでの先頭次数 | `run.py` |
-| [開放 Ising 鎖の短時間距離則](open-chain-distance-law-2026-11-09/REPORT.md) | 距離と XX・YY・ZZ の先頭次数の関係 | `verify.py` |
-| [弱結合リングの短時間距離則](weak-ring-distance-law-2026-11-09/REPORT.md) | 2経路の係数と弱結合リングでの距離則 | `coefficients.py` → `verify.py` |
-| [正反対ペアの先頭項が相殺する弱結合](antipodal-cancellation-2026-11-09/REPORT.md) | 偶数サイズのリングで YY と ZZ それぞれの先頭項が消える条件 | `formulas.py` → `verify.py` |
+| [Path length and leading orders of connected correlations for eight qubits](seam-neighbor-eight-qubit-2026-11-09/REPORT.md) | Leading orders for an eight-qubit open chain and ring | `run.py` |
+| [Short-time distance law for open Ising chains](open-chain-distance-law-2026-11-09/REPORT.md) | How distance determines the leading orders of XX, YY, and ZZ | `verify.py` |
+| [Short-time distance law for rings with a weak link](weak-ring-distance-law-2026-11-09/REPORT.md) | Coefficients from the two paths and the resulting distance law | `coefficients.py` → `verify.py` |
+| [Weak-link strengths that cancel leading terms for antipodal pairs](antipodal-cancellation-2026-11-09/REPORT.md) | Conditions under which the leading YY or ZZ term vanishes in even-sized rings | `formulas.py` → `verify.py` |
 
-## 一様結合強度と相関差
+## Uniform coupling strength and correlation differences
 
-| レポート | 調べたこと | 実行順 |
+| Report | What it examines | Scripts in order |
 | --- | --- | --- |
-| [一様結合強度と直線・輪の連結相関差](uniform-coupling-sweep-2026-11-10/REPORT.md) | 結合強度によるペア別・軸別の相関差の変化 | `run.py` → `plot.py` |
-| [相関差が最大のペアが切り替わる結合強度](uniform-coupling-crossover-2026-11-10/REPORT.md) | 外側ペアと中央ペアの相関差の交点 | `run.py` → `plot.py` |
-| [外側ペアと中央ペアの首位交代を時間帯で分解](crossover-time-window-2026-11-10/REPORT.md) | 観測終了時刻と相関差の順位の関係 | `run.py` → `plot.py` |
+| [Uniform coupling strength and connected correlation differences between the open chain and ring](uniform-coupling-sweep-2026-11-10/REPORT.md) | How the differences vary with coupling strength for each pair and axis | `run.py` → `plot.py` |
+| [Coupling strength at which the pair with the largest correlation difference changes](uniform-coupling-crossover-2026-11-10/REPORT.md) | Crossover between the outer pairs and the central pair | `run.py` → `plot.py` |
+| [Time-window analysis of the crossover between outer and central pairs](crossover-time-window-2026-11-10/REPORT.md) | How the ranking of correlation differences depends on the observation end time | `run.py` → `plot.py` |
 
-## 逆位相ペアと局所回転
+## Antiphase pairs and local rotations
 
-| レポート | 調べたこと | 実行順 |
+| Report | What it examines | Scripts in order |
 | --- | --- | --- |
-| [初期状態 1000 からの占有率・振幅・位相](phase-alignment-2026-11-10/REPORT.md) | 開放鎖とリングにおける位相差と占有率の補完関係 | `run.py` → `plot.py` |
-| [4量子ビットの逆位相制約](antiphase-constraints-2026-11-10/REPORT.md) | ペアの占有率の和が1になる関係と数値残差 | `run.py` |
-| [0番サイトの Y 軸回転と逆位相制約](antiphase-y-rotation-2026-11-10/REPORT.md) | 初期状態を回転したときの残差と位相 | `run.py` → `endpoint_audit.py` |
-| [正負の Y 軸回転で分ける逆位相ペアの残差](antiphase-y-signed-2026-11-10/REPORT.md) | 回転の符号に対する残差の偶成分・奇成分 | `run.py` → `plot.py` |
-| [0番量子ビットの X 軸回転と Y 軸回転](antiphase-xy-rotation-2026-11-10/REPORT.md) | 回転軸による占有率和の残差の違い | `run.py` → `plot.py` |
-| [逆位相ペアの残差を抑える回転軸](antiphase-axis-optimization-2026-11-10/REPORT.md) | 有限の観測窓で残差を最小化する軸 | `run.py` → `plot.py` |
-| [短窓で決めた回転軸の時間外検証](antiphase-axis-holdout-2026-11-10/REPORT.md) | 短い観測窓で選んだ軸を後続の窓で検証 | `run.py` → `plot.py` |
-| [逆位相ペアの残差を抑える軸の長時間極限](antiphase-axis-long-time-2026-11-10/REPORT.md) | 観測窓を延ばしたときの最適軸とその極限 | `run.py` → `plot.py` |
+| [Occupations, amplitudes, and phases from the initial state &#124;1000⟩](phase-alignment-2026-11-10/REPORT.md) | Phase differences and complementary occupations in the open chain and ring | `run.py` → `plot.py` |
+| [Antiphase constraints for four qubits](antiphase-constraints-2026-11-10/REPORT.md) | The constraint that each relevant pair's occupations sum to one and the numerical residuals | `run.py` |
+| [Y-axis rotation at site 0 and the antiphase constraint](antiphase-y-rotation-2026-11-10/REPORT.md) | Residuals and phases after rotating the initial state | `run.py` → `endpoint_audit.py` |
+| [Antiphase pair residuals under positive and negative Y rotations](antiphase-y-signed-2026-11-10/REPORT.md) | Components that are even and odd under reversal of the rotation angle | `run.py` → `plot.py` |
+| [X- and Y-axis rotations of qubit 0](antiphase-xy-rotation-2026-11-10/REPORT.md) | How the residual of the occupation sum depends on the rotation axis | `run.py` → `plot.py` |
+| [Rotation axis that minimizes antiphase pair residuals](antiphase-axis-optimization-2026-11-10/REPORT.md) | The optimal axis over a finite observation window | `run.py` → `plot.py` |
+| [Testing the short-window rotation axis in later windows](antiphase-axis-holdout-2026-11-10/REPORT.md) | How the axis selected in a short observation window performs in subsequent windows | `run.py` → `plot.py` |
+| [Long-time limit of the optimal rotation axis for antiphase pairs](antiphase-axis-long-time-2026-11-10/REPORT.md) | How the optimal axis changes as the observation window grows and what it approaches | `run.py` → `plot.py` |
 
-## 4サイトの同位相と初期角度誤差
+## In-phase oscillations and preparation-angle errors on four sites
 
-| レポート | 調べたこと | 実行順 |
+| Report | What it examines | Scripts in order |
 | --- | --- | --- |
-| [4サイトの局所回転による占有率の同位相探索](four-site-in-phase-2026-11-10/REPORT.md) | 4サイトの占有率が同位相で振動する初期状態の探索 | `baseline.py` → `run.py select` → `run.py evaluate` → `plot.py` |
-| [開放4サイトの占有率の同位相はどこまで続くか](open-chain-phase-persistence-2026-11-10/REPORT.md) | 選んだ状態を長時間の別の観測窓で検証 | `run.py select` → `run.py evaluate` → `plot.py` |
-| [同位相振動を支える周波数と角度誤差への頑健性](open-chain-phase-spectrum-robustness-2026-11-10/REPORT.md) | 周波数成分の分解と初期角度をずらしたときの変化 | `spectrum.py` → `majorana.py` → `robustness.py` → `plot.py` |
-| [独立な初期角度誤差に対する同位相振動](open-chain-independent-angle-errors-2026-11-10/REPORT.md) | サイトごとに異なる角度誤差を与えた場合の位相 | `sweep.py` → `diagnostics.py` → `plot.py` |
-| [PLV が 0.95 を下回る最初の誤差幅](open-chain-plv-onset-2026-11-10/REPORT.md) | 誤差の格子走査で位相同期指標のしきい値を初めて下回る条件 | `scan.py` → `diagnostics.py` → `plot.py` |
+| [Searching for in-phase occupations using local rotations on four sites](four-site-in-phase-2026-11-10/REPORT.md) | A search for initial states whose site occupations oscillate in phase | `baseline.py` → `run.py select` → `run.py evaluate` → `plot.py` |
+| [How long in-phase occupations persist on the open four-site chain](open-chain-phase-persistence-2026-11-10/REPORT.md) | Validation of the selected state in later observation windows | `run.py evaluate` → `plot.py` |
+| [Frequencies of in-phase oscillations and robustness to angle errors](open-chain-phase-spectrum-robustness-2026-11-10/REPORT.md) | Frequency components and sensitivity to changes in the preparation angles | `spectrum.py` → `majorana.py` → `robustness.py` → `plot.py` |
+| [In-phase oscillations under independent preparation-angle errors](open-chain-independent-angle-errors-2026-11-10/REPORT.md) | Phase alignment when the angle error differs from site to site | `sweep.py` → `diagnostics.py` → `plot.py` |
+| [First tested error magnitude at which PLV falls below 0.95](open-chain-plv-onset-2026-11-10/REPORT.md) | Where the phase-locking value first falls below the threshold on the tested error grid | `scan.py` → `diagnostics.py` → `plot.py` |
+
+The long-time in-phase validation uses the published `selection.json`. To repeat the search for the initial state, run `python -B run.py select` first in a separate working copy.
