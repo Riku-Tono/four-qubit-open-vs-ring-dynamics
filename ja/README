@@ -33,3 +33,7 @@ YY の根は約0.470926089、ZZ の根は約0.497654036です。
 - 英語READMEの§21–24 [距離則と相殺根](../README.md#21-eight-qubit-check-of-the-distance-rule-2026-11-09)
 - 日本語の[全ペアの一般式と証明](../experiments/antipodal-cancellation-2026-11-09/REPORT.md)
 - [厳密な状態ベクトル検算](../experiments/antipodal-cancellation-2026-11-09/verify.py)
+
+## 全64接続グラフの有限ショット識別（2026-11-13）
+
+読み出し誤りが各ビットで独立に5%のとき、測定設定と回数を事前に固定したモデルで、全64グラフをそれぞれ95%以上の確率で識別するための最適ショット数は53〜99です。 [実験レポートと再計算手順](../experiments/Fable-Codex-2026-11-13/REPORT.md)

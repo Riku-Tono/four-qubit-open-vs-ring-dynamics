@@ -1,8 +1,8 @@
 # Additional experiments
 
-[日本語](README.md)
+[日本語](README_ja.md)
 
-This index groups the experiments from November 9 and 10, 2026 by topic. The reports describe the calculation settings, results, validation, and saved data. The four-qubit baseline and the August extensions each have a reproducibility ZIP on their release page. [July baseline](https://github.com/Riku-Tono/four-qubit-open-vs-ring-dynamics/releases/tag/v0.1.0-n4-fixed) · [August extensions](https://github.com/Riku-Tono/four-qubit-open-vs-ring-dynamics/releases/tag/v0%2C2)
+This index groups the November 2026 experiments by topic. The reports describe the calculation settings, results, validation, and saved data. The four-qubit baseline and the August extensions each have a reproducibility ZIP on their release page. [July baseline](https://github.com/Riku-Tono/four-qubit-open-vs-ring-dynamics/releases/tag/v0.1.0-n4-fixed) · [August extensions](https://github.com/Riku-Tono/four-qubit-open-vs-ring-dynamics/releases/tag/v0%2C2)
 
 - [Response to transverse fields at the endpoints](#response-to-transverse-fields-at-the-endpoints)
 - [Waveforms and short-time expansions near the seam](#waveforms-and-short-time-expansions-near-the-seam)
@@ -10,6 +10,7 @@ This index groups the experiments from November 9 and 10, 2026 by topic. The rep
 - [Uniform coupling strength and correlation differences](#uniform-coupling-strength-and-correlation-differences)
 - [Antiphase pairs and local rotations](#antiphase-pairs-and-local-rotations)
 - [In-phase oscillations and preparation-angle errors on four sites](#in-phase-oscillations-and-preparation-angle-errors-on-four-sites)
+- [Finite-shot identification of 64 graphs](#finite-shot-identification-of-64-graphs)
 
 ## How to run
 
@@ -84,3 +85,7 @@ The scripts in this section use the Python standard library and saved experiment
 | [First tested error magnitude at which PLV falls below 0.95](open-chain-plv-onset-2026-11-10/REPORT.md) | Where the phase-locking value first falls below the threshold on the tested error grid | `scan.py` → `diagnostics.py` → `plot.py` |
 
 The long-time in-phase validation uses the published `selection.json`. To repeat the search for the initial state, run `python -B run.py select` first in a separate working copy.
+
+## Finite-shot identification of 64 graphs
+
+Under independent 5% readout flips and a fixed measurement schedule, the certificates establish that 99 shots suffice and rule out 52 or fewer shots for 95% success on every labeled graph. [Report and verification commands (Japanese)](Fable-Codex-2026-11-13/REPORT.md) · [99-shot audit ZIP](Fable-Codex-2026-11-13/Codex/four_qubit_p5_99_audit.zip)

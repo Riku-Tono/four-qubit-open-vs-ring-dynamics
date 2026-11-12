@@ -1,8 +1,8 @@
 # 追加実験の目次
 
-[English](README.en.md)
+[English](README.md)
 
-2026年11月9日・10日の実験をテーマ別にまとめています。各レポートに計算条件、結果、検証方法、保存データの説明があります。4量子ビットの基準実験と8月の追加解析は、それぞれのReleaseから再現用ZIPを取得できます。[7月の基準実験](https://github.com/Riku-Tono/four-qubit-open-vs-ring-dynamics/releases/tag/v0.1.0-n4-fixed) · [8月の追加解析](https://github.com/Riku-Tono/four-qubit-open-vs-ring-dynamics/releases/tag/v0%2C2)
+2026年11月の実験をテーマ別にまとめています。各レポートに計算条件、結果、検証方法、保存データの説明があります。4量子ビットの基準実験と8月の追加解析は、それぞれのReleaseから再現用ZIPを取得できます。[7月の基準実験](https://github.com/Riku-Tono/four-qubit-open-vs-ring-dynamics/releases/tag/v0.1.0-n4-fixed) · [8月の追加解析](https://github.com/Riku-Tono/four-qubit-open-vs-ring-dynamics/releases/tag/v0%2C2)
 
 - [端点横磁場への応答](#端点横磁場への応答)
 - [継ぎ目近傍の波形と短時間展開](#継ぎ目近傍の波形と短時間展開)
@@ -10,6 +10,7 @@
 - [一様結合強度と相関差](#一様結合強度と相関差)
 - [逆位相ペアと局所回転](#逆位相ペアと局所回転)
 - [4サイトの同位相と初期角度誤差](#4サイトの同位相と初期角度誤差)
+- [全64グラフの有限ショット識別](#全64グラフの有限ショット識別)
 
 ## 実行方法
 
@@ -84,3 +85,7 @@ python -B verify.py
 | [PLV が 0.95 を下回る最初の誤差幅](open-chain-plv-onset-2026-11-10/REPORT.md) | 誤差の格子走査で位相同期指標のしきい値を初めて下回る条件 | `scan.py` → `diagnostics.py` → `plot.py` |
 
 長時間同位相の検証は、公開済みの `selection.json` を使います。初期状態の探索からやり直す場合は、別の作業用コピーで `python -B run.py select` を先に実行してください。
+
+## 全64グラフの有限ショット識別
+
+読み出し誤り5%の条件で、99ショットでの識別を保証する設計と、52ショット以下を除外する下限を収録しています。測定設定と回数は事前に固定します。 [実験レポートと再計算手順](Fable-Codex-2026-11-13/REPORT.md) · [99ショットの監査ZIP](Fable-Codex-2026-11-13/Codex/four_qubit_p5_99_audit.zip)

@@ -10,6 +10,8 @@
 
 **In-phase occupations and preparation errors.** Sections 29–31 follow a four-site product state whose open-chain occupations stay in phase through the 24 held-out windows ending at $256\pi$. The first PLV failure on the tested 0.001 rad grid occurs at 0.091 rad, on pair 03 in four of 496 fixed error directions. [In-phase results](#29-four-site-in-phase-occupations-and-long-window-validation-2026-11-10) · [PLV boundary](#31-independent-angle-errors-and-the-first-plv-failure-2026-11-10)
 
+**Finite-shot graph identification.** The November 13 study extends the comparison to all 64 labeled four-qubit graphs. With independent 5% readout flips and a fixed measurement schedule, the certificates bound the optimum for 95% success on each graph between 53 and 99 shots. [Report and verification code](experiments/Fable-Codex-2026-11-13/REPORT.md)
+
 ## 1. What is being compared
 
 Two branches, both starting at `t=0` from `|0000>`, both evolved under their own fixed Hamiltonian for the whole observation window:
