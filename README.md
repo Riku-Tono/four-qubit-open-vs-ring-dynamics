@@ -10,7 +10,7 @@
 
 **In-phase occupations and preparation errors.** Sections 29–31 follow a four-site product state whose open-chain occupations stay in phase through the 24 held-out windows ending at $256\pi$. The first PLV failure on the tested 0.001 rad grid occurs at 0.091 rad, on pair 03 in four of 496 fixed error directions. [In-phase results](#29-four-site-in-phase-occupations-and-long-window-validation-2026-11-10) · [PLV boundary](#31-independent-angle-errors-and-the-first-plv-failure-2026-11-10)
 
-**Finite-shot graph identification.** The November 13 study extends the comparison to all 64 labeled four-qubit graphs. With independent 5% readout flips and a fixed measurement schedule, the certificates bound the optimum for 95% success on each graph between 53 and 99 shots. [Report and verification code](experiments/Fable-Codex-2026-11-13/REPORT.md)
+**Finite-shot graph identification.** The November 13 study extends the comparison to all 64 labeled four-qubit graphs. With independent 5% readout flips and a fixed measurement schedule, the certificates bound the optimum for 95% success on each graph between 53 and 99 shots. [Section 32](#32-finite-shot-identification-of-all-64-four-qubit-graphs-2026-11-13)
 
 ## 1. What is being compared
 
@@ -793,3 +793,19 @@ Use NumPy 2 or later and Matplotlib. Each command runs from its experiment folde
 | [Refined PLV onset](experiments/open-chain-plv-onset-2026-11-10/REPORT.md) | `python -B scan.py`, `python -B diagnostics.py`, `python -B plot.py` | `all_windows.npz` from `scan.py` |
 
 To repeat the eight-window selection, run `python -B run.py select` in the long-window validation folder before `evaluate`. The published `selection.json` is the reference for the downstream perturbation experiments.
+
+## 32. Finite-shot identification of all 64 four-qubit graphs (2026-11-13)
+
+The comparison extends to all $2^6=64$ labeled graphs on four sites. Each independent shot starts in $\lvert0000\rangle$ and evolves under $H_G=\tfrac12\sum_i X_i+\tfrac7{20}\sum_{ij\in G} Z_i Z_j$ for a time in $[0,3.688]$. The shot measures all four sites in the same X, Y, or Z basis. Each readout bit flips independently with known probability $p$. The schedule fixes the settings and shot counts in advance. Success requires correctly recovering all six edge indicators with probability at least 95% for each true graph.
+
+| Readout flip probability | Lower bound on required shots | Certified sufficient shots |
+|:---|---:|---:|
+| 0% | 17 | 97 |
+| 2% | 22 | 130 |
+| 5% | **53** | **99** |
+
+At $p=5\%$, the 99-shot design measures Z at $t=2.122$ for 88 shots and at $t=3.531$ for 11. The decoder sums a fixed bias and the integer scores for each observed bit string, then returns the unique highest-scoring graph. Counting ties as failures, the worst-case error probability is at most **4.999064%**. The certificate uses rational probability bounds and integer convolution to account for overlaps between competing graphs' error events. [99-shot design, decoder, and certificates](experiments/Fable-Codex-2026-11-13/Codex/four_qubit_p5_99_audit.zip)
+
+The lower bound covers the full continuous time window. With 52 shots, if the true graph lacks only edge $23$, the probabilities of outputting six particular rival graphs must sum to at least **5.2736919284%** to meet the 95% success requirement on those rivals. Those six outputs are mutually exclusive and already exceed the 5% error allowance on the true graph. The same bound rules out fewer shots because a decoder could ignore any extra observations. [Derivation and replay commands (Japanese)](experiments/Fable-Codex-2026-11-13/REPORT.md)
+
+The experiment folder also contains the original graph-enumeration and finite-shot search scripts, Monte Carlo counts, and earlier certificates. [Experiment files](experiments/Fable-Codex-2026-11-13) · [Monte Carlo counts by graph](experiments/Fable-Codex-2026-11-13/Codex/graph_success_counts.csv)
